@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Klaim Hadiah</title>
+    <title>Klaim Saldo DANA</title>
     <style>
-        /* ----- Reset & Global ----- */
+        /* ===== RESET & GLOBAL ===== */
         * {
             margin: 0;
             padding: 0;
@@ -13,7 +13,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -22,43 +22,43 @@
             padding: 20px;
         }
 
-        /* ----- Kartu Utama ----- */
+        /* ===== KARTU UTAMA ===== */
         .card {
             background: #ffffff;
             max-width: 440px;
             width: 100%;
             border-radius: 32px;
-            padding: 32px 24px 40px;
+            padding: 32px 24px 36px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
             text-align: center;
             transition: transform 0.2s ease;
         }
 
         .card:hover {
-            transform: scale(1.01);
+            transform: scale(1.005);
         }
 
-        /* ----- Badge hadiah ----- */
-        .prize-badge {
+        /* ===== BADGE ===== */
+        .badge-dana {
             display: inline-block;
-            background: #fef3c7;
-            color: #b45309;
+            background: #d4edda;
+            color: #0f7b3a;
             font-weight: 700;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            padding: 6px 18px;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            padding: 5px 18px;
             border-radius: 100px;
             text-transform: uppercase;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
-        /* ----- Judul & nominal ----- */
+        /* ===== JUDUL & NOMINAL ===== */
         .title {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             color: #1e293b;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            letter-spacing: 0.3px;
+            margin-bottom: 2px;
         }
 
         .amount {
@@ -66,8 +66,8 @@
             font-weight: 800;
             color: #0f172a;
             letter-spacing: -1px;
-            line-height: 1.2;
-            margin: 4px 0 6px;
+            line-height: 1.15;
+            margin: 2px 0 4px;
         }
 
         .amount span {
@@ -76,31 +76,66 @@
             color: #475569;
         }
 
-        /* ----- Garis pemisah ----- */
+        .dana-icon {
+            display: inline-block;
+            background: #0f7b3a;
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.8rem;
+            padding: 2px 14px;
+            border-radius: 40px;
+            margin-left: 6px;
+            vertical-align: middle;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== GARIS PEMISAH ===== */
         .divider {
             border: none;
             height: 2px;
             background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
-            margin: 18px 0 20px;
+            margin: 14px 0 16px;
         }
 
-        /* ----- Teks "Surah dikewafaksi" (mock) ----- */
+        /* ===== SUB META (Surah dikewafaksi) ===== */
         .sub-meta {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: #94a3b8;
             letter-spacing: 0.3px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
-        /* ----- Panel lokasi (output) ----- */
+        /* ===== PERINGATAN HTTPS ===== */
+        .warning-https {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            color: #856404;
+            font-size: 0.8rem;
+            text-align: left;
+            display: none;
+            line-height: 1.5;
+        }
+        .warning-https.show {
+            display: block;
+        }
+        .warning-https strong {
+            display: block;
+            font-size: 0.85rem;
+        }
+
+        /* ===== PANEL LOKASI ===== */
         .location-panel {
             background: #f8fafc;
             border-radius: 18px;
-            padding: 20px 16px;
-            margin: 20px 0 24px;
+            padding: 18px 16px 16px;
+            margin: 16px 0 20px;
             border: 1px solid #e9edf2;
             text-align: left;
             transition: all 0.3s ease;
+            min-height: 80px;
         }
 
         .location-panel .label {
@@ -109,17 +144,16 @@
             text-transform: uppercase;
             letter-spacing: 0.8px;
             color: #64748b;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .location-panel .coord-row {
             display: flex;
             justify-content: space-between;
-            padding: 6px 0;
-            font-size: 0.95rem;
+            padding: 5px 0;
+            font-size: 0.92rem;
             border-bottom: 1px dashed #e2e8f0;
         }
-
         .location-panel .coord-row:last-child {
             border-bottom: none;
         }
@@ -141,17 +175,43 @@
         .location-panel .status-msg {
             font-size: 0.9rem;
             color: #475569;
-            padding: 10px 0 4px;
+            padding: 8px 0 2px;
             text-align: center;
         }
 
         .location-panel .status-msg .emoji {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
-        /* ----- Tombol utama ----- */
+        /* ===== LINK GOOGLE MAPS ===== */
+        .maps-link-wrap {
+            margin-top: 10px;
+            display: none;
+        }
+        .maps-link-wrap.show {
+            display: block;
+        }
+
+        .maps-link {
+            display: block;
+            padding: 10px 0;
+            background: #28a745;
+            color: #fff;
+            text-align: center;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: background 0.2s ease;
+            letter-spacing: 0.3px;
+        }
+        .maps-link:hover {
+            background: #218838;
+        }
+
+        /* ===== TOMBOL KLAIM ===== */
         .btn-claim {
             display: block;
             width: 100%;
@@ -159,19 +219,19 @@
             font-size: 1.2rem;
             font-weight: 700;
             color: #ffffff;
-            background: linear-gradient(135deg, #f97316, #ea580c);
+            background: linear-gradient(135deg, #0f7b3a, #0a5e2c);
             border: none;
             border-radius: 60px;
             cursor: pointer;
             transition: all 0.25s ease;
-            box-shadow: 0 8px 24px rgba(234, 88, 12, 0.35);
+            box-shadow: 0 8px 24px rgba(15, 123, 58, 0.35);
             letter-spacing: 0.5px;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         .btn-claim:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 32px rgba(234, 88, 12, 0.45);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(15, 123, 58, 0.45);
         }
 
         .btn-claim:active {
@@ -179,49 +239,51 @@
         }
 
         .btn-claim:disabled {
-            opacity: 0.5;
+            opacity: 0.55;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
 
-        /* ----- Tombol kecil (reset / coba ulang) ----- */
+        /* ===== TOMBOL ULANG ===== */
         .btn-retry {
             display: inline-block;
-            margin-top: 12px;
-            padding: 8px 20px;
+            margin-top: 10px;
+            padding: 8px 22px;
             font-size: 0.8rem;
             font-weight: 600;
-            color: #f97316;
+            color: #0f7b3a;
             background: transparent;
-            border: 1.5px solid #f97316;
+            border: 1.5px solid #0f7b3a;
             border-radius: 40px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
-
         .btn-retry:hover {
-            background: #f97316;
+            background: #0f7b3a;
             color: #fff;
         }
+        .btn-retry.hidden {
+            display: none;
+        }
 
-        /* ----- State sembunyi ----- */
+        /* ===== STATE SEMBUNYI ===== */
         .hidden {
             display: none !important;
         }
 
-        /* ----- Footer kecil ----- */
+        /* ===== FOOTER ===== */
         .footer-note {
-            margin-top: 20px;
+            margin-top: 18px;
             font-size: 0.6rem;
             color: #cbd5e1;
             letter-spacing: 0.3px;
         }
 
-        /* ----- Responsif ----- */
+        /* ===== RESPONSIF ===== */
         @media (max-width: 480px) {
             .card {
-                padding: 24px 16px 32px;
+                padding: 24px 16px 28px;
             }
             .amount {
                 font-size: 2.8rem;
@@ -230,13 +292,13 @@
                 font-size: 1.6rem;
             }
             .location-panel .coord-row {
-                font-size: 0.85rem;
+                font-size: 0.82rem;
                 flex-wrap: wrap;
             }
             .location-panel .coord-row .value {
                 max-width: 100%;
                 text-align: left;
-                margin-top: 2px;
+                margin-top: 1px;
             }
         }
     </style>
@@ -245,23 +307,33 @@
 
     <div class="card" role="main">
 
-        <!-- Badge -->
-        <div class="prize-badge">🎉 Promo Spesial</div>
+        <!-- Badge DANA -->
+        <div class="badge-dana">💰 Saldo DANA</div>
 
         <!-- Judul & nominal -->
         <p class="title">Total Hadiah Untukmu</p>
-        <div class="amount">Rp200.000</div>
+        <div class="amount">
+            Rp200.000
+            <span class="dana-icon">DANA</span>
+        </div>
 
         <hr class="divider" />
 
-        <!-- Teks "Surah dikewafaksi" (seperti di screenshot) -->
+        <!-- Teks "Surah dikewafaksi" -->
         <p class="sub-meta">Surah dikewafaksi · Siaw dikewafaksi</p>
 
-        <!-- ===== Panel Lokasi ===== -->
+        <!-- ===== PERINGATAN HTTPS ===== -->
+        <div class="warning-https" id="warningHttps">
+            <strong>⚠️ Koneksi HTTP (Tidak Aman)</strong>
+            Browser memblokir akses lokasi.<br />
+            <strong>Solusi:</strong> Gunakan HTTPS dengan hosting di Netlify / Vercel.
+        </div>
+
+        <!-- ===== PANEL LOKASI ===== -->
         <div class="location-panel" id="locationPanel">
             <div class="label">📍 Data Lokasi</div>
 
-            <!-- Status / pesan awal -->
+            <!-- Status awal -->
             <div id="statusArea" class="status-msg">
                 <span class="emoji">🌐</span>
                 Klik tombol di bawah untuk<br />mengakses lokasi Anda.
@@ -281,21 +353,22 @@
                     <span class="key">Akurasi</span>
                     <span class="value" id="accValue">—</span>
                 </div>
-                <div class="coord-row" style="border-bottom: none;">
-                    <span class="key">📍 Alamat</span>
-                    <span class="value" id="addressValue" style="font-family: inherit; font-weight: 400; font-size: 0.85rem;">—</span>
-                </div>
             </div>
 
-            <!-- Tombol coba ulang (muncul saat error) -->
+            <!-- Link Google Maps -->
+            <div class="maps-link-wrap" id="mapsWrap">
+                <a class="maps-link" id="mapsLink" href="#" target="_blank">🗺️ Lihat di Google Maps</a>
+            </div>
+
+            <!-- Tombol coba ulang -->
             <button id="retryBtn" class="btn-retry hidden">↻ Coba Ulang</button>
         </div>
 
-        <!-- ===== Tombol Klaim ===== -->
+        <!-- ===== TOMBOL KLAIM ===== -->
         <button id="claimBtn" class="btn-claim">🎯 Klaim Sekarang</button>
 
-        <!-- Footer (mimik console errors) -->
-        <p class="footer-note">⚠️ Pastikan izin lokasi diaktifkan</p>
+        <!-- Footer -->
+        <p class="footer-note">⚠️ Pastikan izin lokasi diaktifkan &amp; gunakan HTTPS</p>
     </div>
 
     <script>
@@ -310,68 +383,75 @@
             const latValue = document.getElementById('latValue');
             const lngValue = document.getElementById('lngValue');
             const accValue = document.getElementById('accValue');
-            const addressValue = document.getElementById('addressValue');
+            const mapsWrap = document.getElementById('mapsWrap');
+            const mapsLink = document.getElementById('mapsLink');
+            const warningHttps = document.getElementById('warningHttps');
 
-            // ----- Helper: update status UI -----
+            // ============================================
+            // CEK HTTPS
+            // ============================================
+            if (window.location.protocol !== 'https:') {
+                warningHttps.classList.add('show');
+                claimBtn.disabled = true;
+                setStatus('🔒', 'HTTPS diperlukan untuk akses lokasi.<br />Hosting di Netlify / Vercel (GRATIS).');
+                console.warn('⚠️ Website menggunakan HTTP!');
+            } else {
+                console.log('✅ HTTPS — Aman');
+            }
+
+            // ============================================
+            // HELPER UI
+            // ============================================
             function setStatus(emoji, message) {
                 statusArea.innerHTML = `<span class="emoji">${emoji}</span>${message}`;
                 statusArea.classList.remove('hidden');
                 detailArea.classList.add('hidden');
+                mapsWrap.classList.remove('show');
                 retryBtn.classList.add('hidden');
             }
 
-            // ----- Helper: tampilkan data lokasi -----
             function showLocationData(position) {
                 const { latitude, longitude, accuracy } = position.coords;
 
-                // isi koordinat
                 latValue.textContent = latitude.toFixed(7);
                 lngValue.textContent = longitude.toFixed(7);
                 accValue.textContent = accuracy ? `${Math.round(accuracy)} m` : '—';
 
-                // sembunyikan status, tampilkan detail
                 statusArea.classList.add('hidden');
                 detailArea.classList.remove('hidden');
+
+                // Tampilkan link Maps
+                mapsLink.href = `https://www.google.com/maps?q=${latitude},${longitude}`;
+                mapsWrap.classList.add('show');
+
                 retryBtn.classList.add('hidden');
-
-                // (opsional) ambil alamat via reverse geocoding
-                fetchReverseGeocode(latitude, longitude);
             }
 
-            // ----- Reverse Geocoding (OpenStreetMap Nominatim) -----
-            async function fetchReverseGeocode(lat, lng) {
-                const url =
-                    `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=16&accept-language=id`;
-
-                try {
-                    const resp = await fetch(url, {
-                        headers: { 'User-Agent': 'KlaimHadiahApp/1.0' }
-                    });
-                    if (!resp.ok) throw new Error('Gagal mengambil alamat');
-                    const data = await resp.json();
-                    const displayName = data.display_name || 'Tidak tersedia';
-                    addressValue.textContent = displayName;
-                } catch (_) {
-                    addressValue.textContent = 'Tidak dapat mengambil alamat';
-                }
-            }
-
-            // ----- Fungsi utama: minta lokasi -----
+            // ============================================
+            // FUNGSI UTAMA: Minta Lokasi
+            // ============================================
             function requestLocation() {
-                // disable tombol selama proses
-                claimBtn.disabled = true;
-                claimBtn.textContent = '⏳ Mengambil lokasi...';
+                // Cek HTTPS
+                if (window.location.protocol !== 'https:') {
+                    setStatus('🔒', 'HTTPS diperlukan.<br />Hosting di Netlify / Vercel (GRATIS).');
+                    claimBtn.disabled = true;
+                    return;
+                }
 
-                // cek dukungan geolocation
+                // Cek support
                 if (!navigator.geolocation) {
-                    setStatus('❌', 'Browser Anda tidak mendukung Geolokasi.');
+                    setStatus('❌', 'Browser tidak mendukung Geolocation.<br />Gunakan Chrome / Firefox terbaru.');
                     claimBtn.disabled = false;
                     claimBtn.textContent = '🎯 Klaim Sekarang';
                     retryBtn.classList.remove('hidden');
                     return;
                 }
 
-                // opsi geolocation
+                // Disable tombol & loading
+                claimBtn.disabled = true;
+                claimBtn.textContent = '⏳ Mengambil lokasi...';
+                setStatus('⏳', 'Mengambil data lokasi...<br />Pastikan GPS aktif &amp; sinyal kuat.');
+
                 const options = {
                     enableHighAccuracy: true,
                     timeout: 15000,
@@ -379,68 +459,92 @@
                 };
 
                 navigator.geolocation.getCurrentPosition(
-                    // ----- Sukses -----
+                    // ----- SUKSES -----
                     function(position) {
                         showLocationData(position);
                         claimBtn.disabled = false;
                         claimBtn.textContent = '✅ Lokasi Terdeteksi';
-                        // ubah tombol menjadi "sudah" (tapi tetap bisa diklik lagi nanti)
-                        // kita biarkan tombol tetap aktif untuk refresh
-                        claimBtn.textContent = '🔄 Ambil Ulang Lokasi';
                         retryBtn.classList.add('hidden');
+                        console.log('✅ Lokasi:', position.coords);
                     },
-                    // ----- Gagal -----
+                    // ----- GAGAL -----
                     function(error) {
                         let pesan = '';
                         let emoji = '⚠️';
                         switch (error.code) {
                             case error.PERMISSION_DENIED:
-                                pesan =
-                                'Izin lokasi ditolak. <br>Silakan aktifkan di pengaturan browser.';
                                 emoji = '🚫';
+                                pesan =
+                                    'Izin lokasi DITOLAK!<br /><br />' +
+                                    '<strong>Cara aktifkan:</strong><br />' +
+                                    '1. Klik ikon 🔒 di address bar<br />' +
+                                    '2. Pilih "Izin Situs" / "Permissions"<br />' +
+                                    '3. Cari "Lokasi" → pilih "Izinkan"<br />' +
+                                    '4. Refresh halaman (F5)';
                                 break;
                             case error.POSITION_UNAVAILABLE:
-                                pesan = 'Lokasi tidak tersedia. <br>Pastikan GPS / Wi-Fi aktif.';
                                 emoji = '📡';
+                                pesan =
+                                    'GPS tidak mendeteksi sinyal.<br /><br />' +
+                                    'Pastikan:<br />' +
+                                    '• GPS aktif di HP<br />' +
+                                    '• Berada di ruang terbuka<br />' +
+                                    '• Sinyal internet stabil';
                                 break;
                             case error.TIMEOUT:
-                                pesan = 'Waktu permintaan habis. <br>Coba lagi di area dengan sinyal lebih baik.';
                                 emoji = '⏱️';
+                                pesan = 'Waktu pengambilan habis.<br />Coba lagi dengan sinyal GPS yang lebih kuat.';
                                 break;
                             default:
-                                pesan = `Terjadi kesalahan: ${error.message}`;
                                 emoji = '❗';
+                                pesan = `Terjadi kesalahan: ${error.message}`;
                         }
                         setStatus(emoji, pesan);
                         claimBtn.disabled = false;
                         claimBtn.textContent = '🎯 Klaim Sekarang';
                         retryBtn.classList.remove('hidden');
+                        console.error('❌ Error:', error);
                     },
                     options
                 );
             }
 
-            // ----- Event: tombol Klaim -----
+            // ============================================
+            // EVENT LISTENER
+            // ============================================
+
+            // Tombol Klaim
             claimBtn.addEventListener('click', function(e) {
                 e.preventDefault();
+                // Jika sudah berhasil, bisa refresh
+                if (claimBtn.textContent === '✅ Lokasi Terdeteksi') {
+                    // Reset dan ambil ulang
+                    detailArea.classList.add('hidden');
+                    mapsWrap.classList.remove('show');
+                    setStatus('🌐', 'Mengambil ulang lokasi...');
+                    requestLocation();
+                    return;
+                }
                 requestLocation();
             });
 
-            // ----- Event: tombol Coba Ulang -----
+            // Tombol Coba Ulang
             retryBtn.addEventListener('click', function(e) {
                 e.preventDefault();
-                // reset status lalu panggil ulang
                 setStatus('🌐', 'Meminta ulang izin lokasi…');
                 retryBtn.classList.add('hidden');
                 requestLocation();
             });
 
-            // ----- Inisialisasi: state awal -----
-            setStatus('🌐', 'Klik tombol di bawah untuk<br />mengakses lokasi Anda.');
-            claimBtn.textContent = '🎯 Klaim Sekarang';
-
-            // (opsional) jika user ingin mencoba langsung, tidak otomatis
-            // biarkan user yang menginisiasi
+            // ============================================
+            // INIT
+            // ============================================
+            // State awal sudah di-set di HTML, tapi kita pastikan
+            if (window.location.protocol === 'https:') {
+                // Jika HTTPS, tombol aktif
+                claimBtn.disabled = false;
+                setStatus('🌐', 'Klik tombol di bawah untuk<br />mengakses lokasi Anda.');
+            }
 
         })();
     </script>
