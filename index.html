@@ -1,553 +1,217 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Klaim Saldo DANA</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Lokasi</title>
     <style>
-        /* ===== RESET & GLOBAL ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(145deg, #0b1a2e 0%, #1a3a5c 100%);
+            font-family: Arial, sans-serif;
             padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            background: #f5f5f5;
         }
-
-        /* ===== KARTU UTAMA ===== */
-        .card {
-            background: #ffffff;
-            max-width: 440px;
-            width: 100%;
-            border-radius: 32px;
-            padding: 32px 24px 36px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-            text-align: center;
-            transition: transform 0.2s ease;
-        }
-
-        .card:hover {
-            transform: scale(1.005);
-        }
-
-        /* ===== BADGE ===== */
-        .badge-dana {
-            display: inline-block;
-            background: #d4edda;
-            color: #0f7b3a;
-            font-weight: 700;
-            font-size: 0.7rem;
-            letter-spacing: 0.5px;
-            padding: 5px 18px;
-            border-radius: 100px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        /* ===== JUDUL & NOMINAL ===== */
-        .title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #1e293b;
-            letter-spacing: 0.3px;
-            margin-bottom: 2px;
-        }
-
-        .amount {
-            font-size: 3.6rem;
-            font-weight: 800;
-            color: #0f172a;
-            letter-spacing: -1px;
-            line-height: 1.15;
-            margin: 2px 0 4px;
-        }
-
-        .amount span {
-            font-size: 2rem;
-            font-weight: 600;
-            color: #475569;
-        }
-
-        .dana-icon {
-            display: inline-block;
-            background: #0f7b3a;
-            color: #fff;
-            font-weight: 800;
-            font-size: 0.8rem;
-            padding: 2px 14px;
-            border-radius: 40px;
-            margin-left: 6px;
-            vertical-align: middle;
-            letter-spacing: 0.5px;
-        }
-
-        /* ===== GARIS PEMISAH ===== */
-        .divider {
+        .btn {
+            padding: 20px 40px;
+            font-size: 20px;
+            background: #007bff;
+            color: white;
             border: none;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
-            margin: 14px 0 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
         }
-
-        /* ===== SUB META (Surah dikewafaksi) ===== */
-        .sub-meta {
-            font-size: 0.72rem;
-            color: #94a3b8;
-            letter-spacing: 0.3px;
-            margin-bottom: 14px;
+        .btn:active { transform: scale(0.97); }
+        .btn:disabled { opacity: 0.5; }
+        
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.8;
+            display: none;
         }
-
-        /* ===== PERINGATAN HTTPS ===== */
-        .warning-https {
+        #result.show { display: block; }
+        #result.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        #result.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        #result.loading { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        
+        .warning {
             background: #fff3cd;
             border: 1px solid #ffc107;
-            border-radius: 14px;
-            padding: 12px 14px;
+            border-radius: 12px;
+            padding: 12px 16px;
             margin-bottom: 16px;
             color: #856404;
-            font-size: 0.8rem;
-            text-align: left;
-            display: none;
-            line-height: 1.5;
-        }
-        .warning-https.show {
-            display: block;
-        }
-        .warning-https strong {
-            display: block;
-            font-size: 0.85rem;
-        }
-
-        /* ===== PANEL LOKASI ===== */
-        .location-panel {
-            background: #f8fafc;
-            border-radius: 18px;
-            padding: 18px 16px 16px;
-            margin: 16px 0 20px;
-            border: 1px solid #e9edf2;
-            text-align: left;
-            transition: all 0.3s ease;
-            min-height: 80px;
-        }
-
-        .location-panel .label {
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: #64748b;
-            margin-bottom: 6px;
-        }
-
-        .location-panel .coord-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 0;
-            font-size: 0.92rem;
-            border-bottom: 1px dashed #e2e8f0;
-        }
-        .location-panel .coord-row:last-child {
-            border-bottom: none;
-        }
-
-        .location-panel .coord-row .key {
-            color: #475569;
-            font-weight: 500;
-        }
-
-        .location-panel .coord-row .value {
-            color: #0f172a;
-            font-weight: 600;
-            font-family: 'Courier New', monospace;
-            word-break: break-all;
-            text-align: right;
-            max-width: 65%;
-        }
-
-        .location-panel .status-msg {
-            font-size: 0.9rem;
-            color: #475569;
-            padding: 8px 0 2px;
-            text-align: center;
-        }
-
-        .location-panel .status-msg .emoji {
-            font-size: 1.5rem;
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        /* ===== LINK GOOGLE MAPS ===== */
-        .maps-link-wrap {
-            margin-top: 10px;
             display: none;
         }
-        .maps-link-wrap.show {
-            display: block;
-        }
-
+        .warning.show { display: block; }
+        
         .maps-link {
-            display: block;
-            padding: 10px 0;
-            background: #28a745;
-            color: #fff;
-            text-align: center;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-            transition: background 0.2s ease;
-            letter-spacing: 0.3px;
-        }
-        .maps-link:hover {
-            background: #218838;
-        }
-
-        /* ===== TOMBOL KLAIM ===== */
-        .btn-claim {
-            display: block;
-            width: 100%;
-            padding: 16px 0;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #ffffff;
-            background: linear-gradient(135deg, #0f7b3a, #0a5e2c);
-            border: none;
-            border-radius: 60px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 8px 24px rgba(15, 123, 58, 0.35);
-            letter-spacing: 0.5px;
-            margin-top: 2px;
-        }
-
-        .btn-claim:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(15, 123, 58, 0.45);
-        }
-
-        .btn-claim:active {
-            transform: scale(0.97);
-        }
-
-        .btn-claim:disabled {
-            opacity: 0.55;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* ===== TOMBOL ULANG ===== */
-        .btn-retry {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 8px 22px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #0f7b3a;
-            background: transparent;
-            border: 1.5px solid #0f7b3a;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .btn-retry:hover {
-            background: #0f7b3a;
-            color: #fff;
-        }
-        .btn-retry.hidden {
             display: none;
+            margin-top: 12px;
+            padding: 14px;
+            background: #28a745;
+            color: white;
+            text-align: center;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
         }
-
-        /* ===== STATE SEMBUNYI ===== */
-        .hidden {
-            display: none !important;
-        }
-
-        /* ===== FOOTER ===== */
-        .footer-note {
-            margin-top: 18px;
-            font-size: 0.6rem;
-            color: #cbd5e1;
-            letter-spacing: 0.3px;
-        }
-
-        /* ===== RESPONSIF ===== */
-        @media (max-width: 480px) {
-            .card {
-                padding: 24px 16px 28px;
-            }
-            .amount {
-                font-size: 2.8rem;
-            }
-            .amount span {
-                font-size: 1.6rem;
-            }
-            .location-panel .coord-row {
-                font-size: 0.82rem;
-                flex-wrap: wrap;
-            }
-            .location-panel .coord-row .value {
-                max-width: 100%;
-                text-align: left;
-                margin-top: 1px;
-            }
-        }
+        .maps-link.show { display: block; }
     </style>
 </head>
 <body>
 
-    <div class="card" role="main">
-
-        <!-- Badge DANA -->
-        <div class="badge-dana">💰 Saldo DANA</div>
-
-        <!-- Judul & nominal -->
-        <p class="title">Total Hadiah Untukmu</p>
-        <div class="amount">
-            Rp200.000
-            <span class="dana-icon">DANA</span>
-        </div>
-
-        <hr class="divider" />
-
-        <!-- Teks "Surah dikewafaksi" -->
-        <p class="sub-meta">Surah dikewafaksi · Siaw dikewafaksi</p>
-
-        <!-- ===== PERINGATAN HTTPS ===== -->
-        <div class="warning-https" id="warningHttps">
-            <strong>⚠️ Koneksi HTTP (Tidak Aman)</strong>
-            Browser memblokir akses lokasi.<br />
-            <strong>Solusi:</strong> Gunakan HTTPS dengan hosting di Netlify / Vercel.
-        </div>
-
-        <!-- ===== PANEL LOKASI ===== -->
-        <div class="location-panel" id="locationPanel">
-            <div class="label">📍 Data Lokasi</div>
-
-            <!-- Status awal -->
-            <div id="statusArea" class="status-msg">
-                <span class="emoji">🌐</span>
-                Klik tombol di bawah untuk<br />mengakses lokasi Anda.
-            </div>
-
-            <!-- Detail koordinat (sembunyi awal) -->
-            <div id="detailArea" class="hidden">
-                <div class="coord-row">
-                    <span class="key">Latitude</span>
-                    <span class="value" id="latValue">—</span>
-                </div>
-                <div class="coord-row">
-                    <span class="key">Longitude</span>
-                    <span class="value" id="lngValue">—</span>
-                </div>
-                <div class="coord-row">
-                    <span class="key">Akurasi</span>
-                    <span class="value" id="accValue">—</span>
-                </div>
-            </div>
-
-            <!-- Link Google Maps -->
-            <div class="maps-link-wrap" id="mapsWrap">
-                <a class="maps-link" id="mapsLink" href="#" target="_blank">🗺️ Lihat di Google Maps</a>
-            </div>
-
-            <!-- Tombol coba ulang -->
-            <button id="retryBtn" class="btn-retry hidden">↻ Coba Ulang</button>
-        </div>
-
-        <!-- ===== TOMBOL KLAIM ===== -->
-        <button id="claimBtn" class="btn-claim">🎯 Klaim Sekarang</button>
-
-        <!-- Footer -->
-        <p class="footer-note">⚠️ Pastikan izin lokasi diaktifkan &amp; gunakan HTTPS</p>
+    <h1>📍 Test Lokasi</h1>
+    <p style="color:#666;margin-bottom:20px;">Klik tombol untuk mendapatkan lokasi Anda</p>
+    
+    <!-- WARNING HTTPS -->
+    <div class="warning" id="warningHttps">
+        ⚠️ <strong>Koneksi HTTP (Tidak Aman)</strong><br>
+        Browser memblokir akses lokasi.<br>
+        <strong>Solusi:</strong> Gunakan HTTPS dengan hosting di Netlify/Vercel
     </div>
+    
+    <button class="btn" id="btnGet" onclick="getLocation()">
+        📍 Dapatkan Lokasi
+    </button>
+    
+    <div id="result"></div>
+    <a class="maps-link" id="mapsLink" href="#" target="_blank">🗺️ Lihat di Google Maps</a>
 
     <script>
-        (function() {
-            'use strict';
+    // ============================================
+    // CEK HTTPS
+    // ============================================
+    if (window.location.protocol !== 'https:') {
+        document.getElementById('warningHttps').classList.add('show');
+        document.getElementById('btnGet').disabled = true;
+        console.warn('⚠️ Website menggunakan HTTP!');
+    } else {
+        console.log('✅ HTTPS - Aman');
+    }
 
-            // ----- DOM refs -----
-            const claimBtn = document.getElementById('claimBtn');
-            const retryBtn = document.getElementById('retryBtn');
-            const statusArea = document.getElementById('statusArea');
-            const detailArea = document.getElementById('detailArea');
-            const latValue = document.getElementById('latValue');
-            const lngValue = document.getElementById('lngValue');
-            const accValue = document.getElementById('accValue');
-            const mapsWrap = document.getElementById('mapsWrap');
-            const mapsLink = document.getElementById('mapsLink');
-            const warningHttps = document.getElementById('warningHttps');
-
-            // ============================================
-            // CEK HTTPS
-            // ============================================
-            if (window.location.protocol !== 'https:') {
-                warningHttps.classList.add('show');
-                claimBtn.disabled = true;
-                setStatus('🔒', 'HTTPS diperlukan untuk akses lokasi.<br />Hosting di Netlify / Vercel (GRATIS).');
-                console.warn('⚠️ Website menggunakan HTTP!');
-            } else {
-                console.log('✅ HTTPS — Aman');
-            }
-
-            // ============================================
-            // HELPER UI
-            // ============================================
-            function setStatus(emoji, message) {
-                statusArea.innerHTML = `<span class="emoji">${emoji}</span>${message}`;
-                statusArea.classList.remove('hidden');
-                detailArea.classList.add('hidden');
-                mapsWrap.classList.remove('show');
-                retryBtn.classList.add('hidden');
-            }
-
-            function showLocationData(position) {
-                const { latitude, longitude, accuracy } = position.coords;
-
-                latValue.textContent = latitude.toFixed(7);
-                lngValue.textContent = longitude.toFixed(7);
-                accValue.textContent = accuracy ? `${Math.round(accuracy)} m` : '—';
-
-                statusArea.classList.add('hidden');
-                detailArea.classList.remove('hidden');
-
-                // Tampilkan link Maps
-                mapsLink.href = `https://www.google.com/maps?q=${latitude},${longitude}`;
-                mapsWrap.classList.add('show');
-
-                retryBtn.classList.add('hidden');
-            }
-
-            // ============================================
-            // FUNGSI UTAMA: Minta Lokasi
-            // ============================================
-            function requestLocation() {
-                // Cek HTTPS
-                if (window.location.protocol !== 'https:') {
-                    setStatus('🔒', 'HTTPS diperlukan.<br />Hosting di Netlify / Vercel (GRATIS).');
-                    claimBtn.disabled = true;
-                    return;
+    // ============================================
+    // FUNGSI GET LOCATION
+    // ============================================
+    function getLocation() {
+        const btn = document.getElementById('btnGet');
+        const result = document.getElementById('result');
+        const mapsLink = document.getElementById('mapsLink');
+        
+        // Reset
+        result.className = '';
+        result.style.display = 'none';
+        mapsLink.classList.remove('show');
+        
+        // CEK HTTPS
+        if (window.location.protocol !== 'https:') {
+            result.className = 'show error';
+            result.style.display = 'block';
+            result.textContent = '❌ ERROR: Website menggunakan HTTP!\n\nLokasi tidak bisa diakses.\n\nSolusi: Hosting di Netlify/Vercel (GRATIS & HTTPS)';
+            return;
+        }
+        
+        // CEK SUPPORT
+        if (!navigator.geolocation) {
+            result.className = 'show error';
+            result.style.display = 'block';
+            result.textContent = '❌ Browser tidak mendukung Geolocation\n\nGunakan Chrome atau Firefox terbaru.';
+            return;
+        }
+        
+        // LOADING
+        btn.disabled = true;
+        btn.textContent = '⏳ Mengambil...';
+        result.className = 'show loading';
+        result.style.display = 'block';
+        result.textContent = '⏳ Mengambil data lokasi...\n\nPastikan GPS aktif dan sinyal kuat.';
+        
+        // AMBIL LOKASI
+        navigator.geolocation.getCurrentPosition(
+            // ===== SUKSES =====
+            function(pos) {
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+                const acc = pos.coords.accuracy;
+                
+                result.className = 'show success';
+                result.style.display = 'block';
+                result.textContent = 
+                    '✅ LOKASI BERHASIL!\n\n' +
+                    `🌐 Latitude: ${lat.toFixed(7)}\n` +
+                    `🌐 Longitude: ${lon.toFixed(7)}\n` +
+                    `📏 Akurasi: ±${Math.round(acc)} meter\n` +
+                    `🕐 Waktu: ${new Date().toLocaleString('id-ID')}`;
+                
+                // Tampilkan link maps
+                mapsLink.href = `https://www.google.com/maps?q=${lat},${lon}`;
+                mapsLink.classList.add('show');
+                
+                // Reset button
+                btn.disabled = false;
+                btn.textContent = '✅ Berhasil!';
+                
+                console.log('✅ Lokasi:', { lat, lon, acc });
+            },
+            
+            // ===== ERROR =====
+            function(err) {
+                let pesan = '';
+                let solusi = '';
+                
+                switch(err.code) {
+                    case 1:
+                        pesan = '❌ Izin lokasi DITOLAK!';
+                        solusi = 'CARA AKTIFKAN:\n' +
+                                '1. Klik ikon 🔒 di address bar\n' +
+                                '2. Pilih "Izin Situs" / "Permissions"\n' +
+                                '3. Cari "Lokasi" → pilih "Izinkan"\n' +
+                                '4. Refresh halaman (F5)\n' +
+                                '5. Klik tombol lagi';
+                        break;
+                    case 2:
+                        pesan = '❌ GPS tidak mendeteksi sinyal!';
+                        solusi = 'Pastikan:\n' +
+                                '• GPS aktif di HP\n' +
+                                '• Berada di ruang terbuka\n' +
+                                '• Sinyal internet stabil';
+                        break;
+                    case 3:
+                        pesan = '❌ Waktu pengambilan habis!';
+                        solusi = 'Coba lagi dengan sinyal GPS yang lebih kuat.';
+                        break;
+                    default:
+                        pesan = `❌ Error: ${err.message}`;
+                        solusi = 'Coba refresh halaman atau gunakan browser lain.';
                 }
-
-                // Cek support
-                if (!navigator.geolocation) {
-                    setStatus('❌', 'Browser tidak mendukung Geolocation.<br />Gunakan Chrome / Firefox terbaru.');
-                    claimBtn.disabled = false;
-                    claimBtn.textContent = '🎯 Klaim Sekarang';
-                    retryBtn.classList.remove('hidden');
-                    return;
-                }
-
-                // Disable tombol & loading
-                claimBtn.disabled = true;
-                claimBtn.textContent = '⏳ Mengambil lokasi...';
-                setStatus('⏳', 'Mengambil data lokasi...<br />Pastikan GPS aktif &amp; sinyal kuat.');
-
-                const options = {
-                    enableHighAccuracy: true,
-                    timeout: 15000,
-                    maximumAge: 0,
-                };
-
-                navigator.geolocation.getCurrentPosition(
-                    // ----- SUKSES -----
-                    function(position) {
-                        showLocationData(position);
-                        claimBtn.disabled = false;
-                        claimBtn.textContent = '✅ Lokasi Terdeteksi';
-                        retryBtn.classList.add('hidden');
-                        console.log('✅ Lokasi:', position.coords);
-                    },
-                    // ----- GAGAL -----
-                    function(error) {
-                        let pesan = '';
-                        let emoji = '⚠️';
-                        switch (error.code) {
-                            case error.PERMISSION_DENIED:
-                                emoji = '🚫';
-                                pesan =
-                                    'Izin lokasi DITOLAK!<br /><br />' +
-                                    '<strong>Cara aktifkan:</strong><br />' +
-                                    '1. Klik ikon 🔒 di address bar<br />' +
-                                    '2. Pilih "Izin Situs" / "Permissions"<br />' +
-                                    '3. Cari "Lokasi" → pilih "Izinkan"<br />' +
-                                    '4. Refresh halaman (F5)';
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                emoji = '📡';
-                                pesan =
-                                    'GPS tidak mendeteksi sinyal.<br /><br />' +
-                                    'Pastikan:<br />' +
-                                    '• GPS aktif di HP<br />' +
-                                    '• Berada di ruang terbuka<br />' +
-                                    '• Sinyal internet stabil';
-                                break;
-                            case error.TIMEOUT:
-                                emoji = '⏱️';
-                                pesan = 'Waktu pengambilan habis.<br />Coba lagi dengan sinyal GPS yang lebih kuat.';
-                                break;
-                            default:
-                                emoji = '❗';
-                                pesan = `Terjadi kesalahan: ${error.message}`;
-                        }
-                        setStatus(emoji, pesan);
-                        claimBtn.disabled = false;
-                        claimBtn.textContent = '🎯 Klaim Sekarang';
-                        retryBtn.classList.remove('hidden');
-                        console.error('❌ Error:', error);
-                    },
-                    options
-                );
+                
+                result.className = 'show error';
+                result.style.display = 'block';
+                result.textContent = pesan + '\n\n💡 ' + solusi;
+                
+                // Reset button
+                btn.disabled = false;
+                btn.textContent = '📍 Coba Lagi';
+                
+                console.error('❌ Error:', err);
+            },
+            
+            // ===== OPTIONS =====
+            {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 0
             }
-
-            // ============================================
-            // EVENT LISTENER
-            // ============================================
-
-            // Tombol Klaim
-            claimBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                // Jika sudah berhasil, bisa refresh
-                if (claimBtn.textContent === '✅ Lokasi Terdeteksi') {
-                    // Reset dan ambil ulang
-                    detailArea.classList.add('hidden');
-                    mapsWrap.classList.remove('show');
-                    setStatus('🌐', 'Mengambil ulang lokasi...');
-                    requestLocation();
-                    return;
-                }
-                requestLocation();
-            });
-
-            // Tombol Coba Ulang
-            retryBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                setStatus('🌐', 'Meminta ulang izin lokasi…');
-                retryBtn.classList.add('hidden');
-                requestLocation();
-            });
-
-            // ============================================
-            // INIT
-            // ============================================
-            // State awal sudah di-set di HTML, tapi kita pastikan
-            if (window.location.protocol === 'https:') {
-                // Jika HTTPS, tombol aktif
-                claimBtn.disabled = false;
-                setStatus('🌐', 'Klik tombol di bawah untuk<br />mengakses lokasi Anda.');
-            }
-
-        })();
+        );
+    }
     </script>
-
 </body>
 </html>
