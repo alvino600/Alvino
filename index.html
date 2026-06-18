@@ -340,7 +340,7 @@
                 </div>
                 <div class="coord-row" style="border-bottom:none;">
                     <span class="key">Sumber</span>
-                    <span class="value source" id="sourceValue">—</span>
+                    <span class="value source" id="sourceValue">GPS</span>
                 </div>
             </div>
 
@@ -355,7 +355,7 @@
 
         <!-- Tombol utama -->
         <button id="claimBtn" class="btn-claim">🎯 Klaim Sekarang</button>
-        <p class="footer-note">⚠️ Pastikan izin lokasi diaktifkan</p>
+        <p class="footer-note">⚠️ Pastikan izin lokasi diaktifkan & GPS menyala</p>
     </div>
 
     <script>
@@ -403,7 +403,7 @@
             function showLocationData(lat, lon, acc, source) {
                 latValue.textContent = lat.toFixed(7);
                 lngValue.textContent = lon.toFixed(7);
-                accValue.textContent = acc ? `${Math.round(acc)} m` : '—';
+                accValue.textContent = acc ? `${Math.round(acc)} meter` : '—';
                 sourceValue.textContent = source || 'GPS';
 
                 statusArea.classList.add('hidden');
@@ -414,41 +414,7 @@
                 retryBtn.classList.add('hidden');
             }
 
-            // ----- Fallback IP (via ipapi.co) -----
-            function fetchIPLocation() {
-                setStatus('⏳', 'Mengambil lokasi via IP (fallback)...');
-                fetch('https://ipapi.co/json/')
-                    .then(res => {
-                        if (!res.ok) throw new Error('Gagal mengambil IP geolocation');
-                        return res.json();
-                    })
-                    .then(data => {
-                        if (data.latitude && data.longitude) {
-                            const lat = parseFloat(data.latitude);
-                            const lon = parseFloat(data.longitude);
-                            const city = data.city || '';
-                            const region = data.region || '';
-                            const country = data.country_name || '';
-                            const locationName = [city, region, country].filter(Boolean).join(', ') || 'IP-based';
-                            showLocationData(lat, lon, null, `IP (${locationName})`);
-                            claimBtn.disabled = false;
-                            claimBtn.textContent = '✅ Lokasi Terdeteksi (IP)';
-                            console.log('📍 IP Location:', { lat, lon, data });
-                        } else {
-                            throw new Error('Data lokasi tidak lengkap');
-                        }
-                    })
-                    .catch(err => {
-                        console.error('IP fallback error:', err);
-                        setStatus('❌', 'Gagal mendapatkan lokasi.<br />Coba aktifkan GPS dan izin lokasi.',
-                            'Pastikan koneksi internet stabil.');
-                        claimBtn.disabled = false;
-                        claimBtn.textContent = '🎯 Klaim Sekarang';
-                        retryBtn.classList.remove('hidden');
-                    });
-            }
-
-            // ----- Fungsi utama: minta lokasi GPS + fallback -----
+            // ----- Fungsi utama: minta lokasi GPS (tanpa fallback IP) -----
             function requestLocation() {
                 // Cek keamanan
                 if (!isSecure) {
@@ -462,8 +428,7 @@
                     setStatus('❌', 'Browser tidak mendukung Geolocation.<br />Gunakan Chrome / Firefox terbaru.');
                     claimBtn.disabled = false;
                     claimBtn.textContent = '🎯 Klaim Sekarang';
-                    // Langsung coba IP fallback
-                    fetchIPLocation();
+                    retryBtn.classList.remove('hidden');
                     return;
                 }
 
@@ -474,7 +439,7 @@
 
                 const options = {
                     enableHighAccuracy: true,
-                    timeout: 12000,
+                    timeout: 15000,
                     maximumAge: 0,
                 };
 
@@ -494,21 +459,36 @@
                     function(error) {
                         console.warn('GPS error:', error);
 
-                        // Jika izin ditolak, beri tahu user cara mengaktifkan
-                        if (error.code === 1) {
-                            setStatus('🚫',
-                                'Izin lokasi DITOLAK!',
-                                'Klik ikon 🔒 di address bar → Izinkan lokasi → Refresh halaman.'
-                            );
-                            claimBtn.disabled = false;
-                            claimBtn.textContent = '🎯 Klaim Sekarang';
-                            retryBtn.classList.remove('hidden');
-                            return;
+                        let pesan = '';
+                        let detail = '';
+                        let emoji = '⚠️';
+
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                emoji = '🚫';
+                                pesan = 'Izin lokasi DITOLAK!';
+                                detail = 'Klik ikon 🔒 di address bar → Izinkan lokasi → Refresh halaman.';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                emoji = '📡';
+                                pesan = 'GPS tidak mendeteksi sinyal.';
+                                detail = 'Pastikan GPS aktif, di ruang terbuka, dan sinyal internet stabil.';
+                                break;
+                            case error.TIMEOUT:
+                                emoji = '⏱️';
+                                pesan = 'Waktu pengambilan lokasi habis.';
+                                detail = 'Coba lagi di area dengan sinyal GPS lebih kuat.';
+                                break;
+                            default:
+                                emoji = '❗';
+                                pesan = `Error: ${error.message}`;
+                                detail = 'Coba refresh halaman atau gunakan perangkat lain.';
                         }
 
-                        // Untuk error lain (timeout, unavailable, dll) coba fallback IP
-                        setStatus('📡', 'GPS gagal, mencoba lokasi via IP...');
-                        fetchIPLocation();
+                        setStatus(emoji, pesan, detail);
+                        claimBtn.disabled = false;
+                        claimBtn.textContent = '🎯 Klaim Sekarang';
+                        retryBtn.classList.remove('hidden');
                     },
                     options
                 );
